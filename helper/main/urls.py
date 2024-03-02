@@ -31,4 +31,5 @@ urlpatterns = [
     path('reset/done/', PasswordResetCompleteView.as_view(
         template_name='authapp/password_reset_complete.html'), name='password_reset_complete'),
 
+
 ]

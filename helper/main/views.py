@@ -3,6 +3,7 @@ from django.http import request
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistration, UserEditForm
+from .models import Category
 
 
 # Create your views here.
@@ -10,10 +11,8 @@ from .forms import UserRegistration, UserEditForm
 
 @login_required
 def dashboard(request):
-    context = {
-        "welcome": "Welcome to your dashboard"
-    }
-    return render(request, 'dashboard.html', context=context)
+    data = Category.objects.all
+    return render(request, 'dashboard.html', {'data': data})
 
 
 def register(request):

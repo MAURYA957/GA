@@ -1,3 +1,5 @@
+{% include 'nav.html' %}
+{% block body %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,19 +65,5 @@ html {
 <body>
 
 <br>
-
-<div class="row">
-  {% for Category in data %}
-  <div class="column">
-    <div class="card">
-      <img src="https://pbs.twimg.com/media/E8GK3krVIAMrZlg?format=jpg&name=large" alt="Jane" style="width:100%">
-      <div class="container">
-        <h3>{{ Category.title }}</h3>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
-</div>
-</br>
-</body>
-</html>
+{% endblock %}
+{% include 'footer.html' %}
