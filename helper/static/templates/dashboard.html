@@ -68,11 +68,9 @@ html {
 <div class="row">
 {% block content %}
     <ul>
-        <table style="width:50%" border="1px solid black" border-collapse="collapse">
+        <table style="width:100%" border="1px solid black" border-collapse="collapse">
         <thead>
             <tr>
-
-
                 <th>Drone id</th>
                 <th>UIN</th>
                 <th>Model</th>
@@ -86,19 +84,17 @@ html {
         </thead>
             {% for warranty in warranties %}
             <tr>
-             <td>{{warranty.drone_id }}</td>
-             <td>{{warranty.uin }}</td>
-             <td>{{warranty.product_model }}</td>
-             <td>{{warranty.customer_name }}</td>
-             <td>{{warranty.city }}</td>
-             <td>{{warranty.start_date }}</td>
+             <td>{{ warranty.drone }}</td>
+             <td>{{ warranty.uin }}</td>
+             <td>{{ warranty.product_model }}</td>
+             <td>{{ warranty.secondry_owner }}</td>
+             <td>{{ warranty.city }}</td>
+             <td>{{ warranty.start_date }}</td>
              <td>{{ warranty.end_date }}</td>
-             <td>{{warranty.handover_doc }}</td>
-             <td>{{warranty.dispatch_list }}</td>
+             <td><a href="{{ warranty.handover_doc.url }}">Download</a></td>
+             <td><a href="{{ warranty.dispatch_list.url }}">Download</a></td>
             </tr>
-
             {% endfor %}
-
         </table>
     </ul>
 <h3></h3>

@@ -3,7 +3,7 @@ from django.http import request
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistration, UserEditForm
-from .models import Category
+from .models import Category, Warranty, Product, Drone, AllocatedCustomer
 
 
 # Create your views here.
@@ -11,8 +11,8 @@ from .models import Category
 
 @login_required
 def dashboard(request):
-    data = Category.objects.all
-    return render(request, 'dashboard.html', {'data': data})
+        warranties = Warranty.objects.all()
+        return render(request, 'dashboard.html', {'warranties': warranties})
 
 
 def register(request):
