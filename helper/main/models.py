@@ -1,12 +1,7 @@
 from django.contrib.auth.models import User
 from django import forms
-from django.db import models
 from datetime import timedelta
-import requests
 from django.db import models
-from django.utils.translation import gettext_lazy as _
-from .utils import fetch_countries_from_api
-
 
 # from .models import Profile
 
@@ -52,7 +47,6 @@ class AddItem(models.Model):
 
 
 # warranties/models.py
-from django.db import models
 
 expertise_choice = (
     ("1", "None"),
@@ -63,37 +57,6 @@ expertise_choice = (
     ("6", "Developers")
 )
 
-State = (
-    ("1", "Andhra Pradesh"),
-    ("2", "Arunachal Pradesh"),
-    ("3", "Assam"),
-    ("4", "Bihar"),
-    ("5", "Chhattisgarh"),
-    ("6", "Goa"),
-    ("7", "Gujarat"),
-    ("8", "Haryana"),
-    ("9", "Himachal Pradesh"),
-    ("10", "Jharkhand"),
-    ("11", "Karnataka"),
-    ("12", "Kerala"),
-    ("13", "Madhya Pradesh"),
-    ("14", "Maharashtra"),
-    ("15", "Manipur"),
-    ("16", "Meghalaya"),
-    ("17", "Mizoram"),
-    ("18", "Nagaland"),
-    ("19", "Odisha"),
-    ("20", "Punjab"),
-    ("21", "Rajasthan"),
-    ("22", "Sikkim"),
-    ("23", "Tamil Nadu"),
-    ("24", "Telangana"),
-    ("25", "Tripura"),
-    ("26", "Uttar Pradesh"),
-    ("27", "Uttarakhand"),
-    ("28", "West Bengal"),
-
-)
 
 department_choice = (
     ("1", "None"),
@@ -122,12 +85,39 @@ type_drone = (
 )
 
 
+class Country(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.Name
+
+
+class State(models.Model):
+    id = models.AutoField(primary_key=True)
+    state_name = models.CharField(max_length=100)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.state_name
+
+
+class District(models.Model):
+    id = models.AutoField(primary_key=True)
+    District_name = models.CharField(max_length=100)
+    state_name = models.ForeignKey(State, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.District_name
+
+
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='static/media/image/product/', height_field=None, width_field=None,
+    image = models.ImageField(upload_to='image/product/', height_field=None, width_field=None,
                               max_length=100)
-    spec = models.FileField(upload_to='static/documents/product/')
+    spec = models.FileField(upload_to='documents/product/')
     description = models.TextField()
     created_on = models.DateField(auto_now=True)
 
@@ -139,9 +129,9 @@ class ProductModel(models.Model):
     id = models.AutoField(primary_key=True)
     model_name = models.CharField(max_length=100)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='static/media/image/model/', height_field=None, width_field=None,
+    image = models.ImageField(upload_to='image/productmodel/', height_field=None, width_field=None,
                               max_length=100)
-    spec = models.FileField(upload_to='static/documents/product/')
+    spec = models.FileField(upload_to='documents/productmodel/')
     description = models.TextField()
     created_on = models.DateField(auto_now=True)
 
@@ -161,18 +151,23 @@ class Drone(models.Model):
         return self.Drone_id
 
 
+@classmethod
+def get_uin_choices(cls):
+    # Query the Drone model to get unique UIN values
+    uins = Drone.objects.values_list('UIN', flat=True).distinct()
+    # Convert the query result to a list of tuples for dropdown choices
+    uin_choices = [(uin, uin) for uin in uins]
+    return uin_choices
+
+
 class Customer(models.Model):
     id = models.AutoField(primary_key=True)
     customer_name = models.CharField(max_length=20)
     address = models.CharField(max_length=100)
     city = models.CharField(max_length=20)
-    country = models.CharField(max_length=100, choices=fetch_countries_from_api(), default='',
-                               verbose_name=_('Country'))
-    # state = models.CharField(max_length=100, choices=fetch_states_from_api(''), default='', verbose_name=_('State'))
-    # district = models.CharField(max_length=100, choices=fetch_districts_from_api('', ''), default='',
-    #                            verbose_name=_('District'))
-    state = models.CharField(max_length=50, choices=State, default=1)
-    district = models.CharField(max_length=20)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    district = models.ForeignKey(District, on_delete=models.CASCADE)
     pincode = models.IntegerField()
     contact = models.CharField(max_length=20)
     email = models.EmailField(max_length=100)
@@ -187,14 +182,9 @@ class AllocatedCustomer(models.Model):
     id = models.AutoField(primary_key=True)
     primary_customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     AllocatedCustomer_name = models.CharField(max_length=20)
-    AllocatedCustomer_country = models.CharField(max_length=100, choices=fetch_countries_from_api(), default='',
-                                                 verbose_name=_('Country'))
-    # AllocatedCustomer_state = models.CharField(max_length=100, choices=fetch_states_from_api(''), default='',
-    #  verbose_name=_('State'))
-    # AllocatedCustomer_district = models.CharField(max_length=100, choices=fetch_districts_from_api('', ''), default='',
-    #  verbose_name=_('District'))
-    AllocatedCustomer_state = models.CharField(max_length=50, choices=State, default=1)
-    AllocatedCustomer_district = models.CharField(max_length=20)
+    AllocatedCustomer_country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    AllocatedCustomer_state = models.ForeignKey(State, on_delete=models.CASCADE)
+    AllocatedCustomer_district = models.ForeignKey(District, on_delete=models.CASCADE)
     AllocatedCustomer_city = models.CharField(max_length=20)
     AllocatedCustomer_address = models.CharField(max_length=100)
     AllocatedCustomer_pincode = models.IntegerField()
@@ -207,6 +197,20 @@ class AllocatedCustomer(models.Model):
         return str(self.AllocatedCustomer_name)
 
 
+@classmethod
+def get_city_choices(cls):
+    # Query the AllocatedCustomer model to get unique city values
+    cities = AllocatedCustomer.objects.values_list('AllocatedCustomer_city', flat=True).distinct()
+    # Convert the query result to a list of tuples for dropdown choices
+    city_choices = [(city, city) for city in cities]
+    return city_choices
+
+
+"""class Meta:
+    verbose_name = _("Warranty")
+    verbose_name_plural = _("Warranties")"""
+
+
 class Warranty(models.Model):
     id = models.AutoField(primary_key=True)
     primary_owner = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -214,12 +218,14 @@ class Warranty(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     product_model = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
     drone = models.ForeignKey(Drone, on_delete=models.CASCADE)
+    #uin = models.CharField(max_length=100, choices=get_uin_choices, default=None)
+    #city = models.CharField(max_length=100, choices=get_city_choices, default=None)
     dispatch_date = models.DateField()
     delivery_date = models.DateField()
     start_date = models.DateField()
     end_date = models.DateField()
-    dispatch_list = models.FileField(upload_to='static/documents/dispatch/')
-    handover_doc = models.FileField(upload_to='static/documents/handover/')
+    dispatch_list = models.FileField(upload_to='documents/dispatch/')
+    handover_doc = models.FileField(upload_to='documents/handover/')
     created_on = models.DateField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -248,7 +254,7 @@ class ECN(models.Model):
     release_by = models.CharField(max_length=100)
     release_date = models.DateField()
     desc = models.CharField(max_length=1000)
-    sop = models.FileField(upload_to='static/documents/SOP/')
+    sop = models.FileField(upload_to='documents/SOP/')
     created_on = models.DateField(auto_now_add=True)
 
     def __str__(self):

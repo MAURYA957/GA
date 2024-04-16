@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Category, AddItem
-from .models import ProductModel, Product, Warranty, ECN, Drone, Customer, AllocatedCustomer
+from .models import ProductModel, Product, Warranty, ECN, Drone, Customer, AllocatedCustomer, District, State, Country
 from django.contrib import admin
 
 
@@ -51,5 +51,23 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(AllocatedCustomer)
 class AllocatedCustomerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'primary_customer', 'AllocatedCustomer_name', 'AllocatedCustomer_address', 'AllocatedCustomer_city', 'AllocatedCustomer_country', 'AllocatedCustomer_state',
-                    'AllocatedCustomer_district', 'AllocatedCustomer_pincode', 'AllocatedCustomer_contact', 'AllocatedCustomer_email', 'AllocatedCustomer_Escalation_contact', 'AllocatedCustomer_Escalation_email']
+    list_display = ['id', 'primary_customer', 'AllocatedCustomer_name', 'AllocatedCustomer_address',
+                    'AllocatedCustomer_city', 'AllocatedCustomer_country', 'AllocatedCustomer_state',
+                    'AllocatedCustomer_district', 'AllocatedCustomer_pincode', 'AllocatedCustomer_contact',
+                    'AllocatedCustomer_email', 'AllocatedCustomer_Escalation_contact',
+                    'AllocatedCustomer_Escalation_email']
+
+
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ['id', 'Name']
+
+
+@admin.register(State)
+class StateAdmin(admin.ModelAdmin):
+    list_display = ['id', 'state_name', 'country']
+
+
+@admin.register(District)
+class DistrictAdmin(admin.ModelAdmin):
+    list_display = ['id', 'state_name', 'country', 'District_name']

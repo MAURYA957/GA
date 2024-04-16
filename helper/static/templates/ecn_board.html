@@ -123,8 +123,8 @@ html {
              <td>{{ warranty.secondry_owner_city }}</td>
              <td>{{ warranty.start_date }}</td>
              <td>{{ warranty.end_date }}</td>
-             <td><a href="#">Download</a></td>
-             <td><a href="#">Download</a></td>
+             <td><a href="{{ warranty.handover_doc.url }}">Download</a></td>
+             <td><a href="{{ warranty.dispatch_list.url }}">Download</a></td>
             </tr>
             {% endfor %}
         </table>

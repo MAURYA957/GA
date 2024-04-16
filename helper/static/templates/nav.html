@@ -2,16 +2,19 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Include Font Awesome library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 <style>
 body {
   margin: 0;
-  font-size: 28px;
+  font-size: 16px;
   font-family: Arial, Helvetica, sans-serif;
 }
 
 .header {
   background-color: #EEF8FB;
-  padding: 0px;
+  padding: 10px 0;
   text-align: center;
 }
 
@@ -27,7 +30,7 @@ body {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 16px;
 }
 
 #navbar a {
@@ -37,7 +40,7 @@ body {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 16px;
 }
 
 #navbar a:hover {
@@ -63,10 +66,11 @@ body {
 .sticky + .content {
   padding-top: 60px;
 }
-/* The dropdown container */
+
+/* Dropdown container */
 .dropdown {
   float: left;
-  overflow: hidden;
+  position: relative;
 }
 
 /* Dropdown button */
@@ -79,6 +83,7 @@ body {
   background-color: inherit;
   font-family: inherit; /* Important for vertical align on mobile phones */
   margin: 0; /* Important for vertical align on mobile phones */
+  cursor: pointer;
 }
 
 /* Add a red background color to navbar links on hover */
@@ -98,7 +103,6 @@ body {
 
 /* Links inside the dropdown */
 .dropdown-content a {
-  float: none;
   color: black;
   padding: 12px 16px;
   text-decoration: none;
@@ -115,54 +119,51 @@ body {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+/* Adjust dropdown position */
+.dropdown-content {
+  top: 100%;
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <marquee><h2>Welcome to General Aeronautics Helper Interface</h2></marquee>
+  <h2>Welcome to General Aeronautics Aftersales Interface</h2>
 </div>
 
 <div id="navbar">
   <a href="javascript:void(0)">Home</a>
-  <a href="javascript:void(0)">PM Sheets</a>
-  <a href="javascript:void(0)">Troubleshooting Article</a>
-<div class="dropdown">
-    <button class="dropbtn">Dropdown
+  <a href="javascript:void(0)">Knowledge_Base</a>
+  <a href="javascript:void(0)">Warranty_Board</a>
+  <a href="javascript:void(0)">ECN_Board</a>
+  <a href="javascript:void(0)">Subscription_Board</a>
+  {% if request.user.is_staff %}
+  <div class="dropdown">
+    <button class="dropbtn">Add_data
       <i class="fa fa-caret-down"></i>
     </button>
     <div class="dropdown-content">
-      <a href="#">Link 1</a>
-      <a href="#">Link 2</a>
-      <a href="#">Link 3</a>
+      <a href="#">Add_Warranty</a>
+      <a href="#">Add_Customer</a>
+      <a href="#">Add_Owners</a>
+      <a href="#">Add_Drone</a>
+      <a href="#">Add_SOP</a>
     </div>
   </div>
   <span>
-            {% if request.user.is_authenticated %}
-            <a href="{% url 'authapp:login' %}" class="btn btn-danger">Logout</a>
-            <span><a class="greet">Welcome {{request.user}}</span>
-            {% else %}
-            <div class="navbar">
-                <a href="{% url 'authapp:login' %}" class="btn btn-secondary">Log-in</a>
-                <a href="{% url 'authapp:register' %}" class="btn btn-info ">Register</a>
-            </div>
-            {% endif %}
-        </span>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'authapp:login' %}" class="btn btn-danger">Logout</a>
+    <span><a class="greet">Welcome {{request.user}}</a></span>
+    {% else %}
+    <div class="navbar">
+      <a href="{% url 'authapp:login' %}" class="btn btn-secondary">Log-in</a>
+      <a href="{% url 'authapp:register' %}" class="btn btn-info ">Register</a>
+    </div>
+    {% endif %}
+  </span>
 </div>
-<script>
-window.onscroll = function() {myFunction()};
-
-var navbar = document.getElementById("navbar");
-var sticky = navbar.offsetTop;
-
-function myFunction() {
-  if (window.pageYOffset >= sticky) {
-    navbar.classList.add("sticky")
-  } else {
-    navbar.classList.remove("sticky");
-  }
-}
-</script>
 
 </body>
 </html>

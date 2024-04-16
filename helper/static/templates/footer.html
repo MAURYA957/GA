@@ -7,17 +7,28 @@ footer {
   padding: 30px;
   background-color: lightblue;
   color: white;
+  cursor: pointer; /* Add pointer cursor to make it interactive */
+}
+
+/* Style the anchor tag for the email address */
+footer a {
+  color: white;
+  text-decoration: none; /* Remove underline */
+}
+
+/* Change color of anchor tag on hover */
+footer a:hover {
+  color: lightgrey;
 }
 </style>
 </head>
 <body>
-<footer>
+<footer onclick="window.location.href='mailto:support@generalaeronautics.com';"> <!-- Add onclick event to make it interactive -->
 
-  <p>@2022 All right reserved with General Aeronautics<br>
+  <p>@2022 All rights reserved with General Aeronautics<br>
   <a href="mailto:support@generalaeronautics.com">support@generalaeronautics.com</a></p>
 
 </footer>
-
 
 </body>
 </html>

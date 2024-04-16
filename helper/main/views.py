@@ -1,9 +1,11 @@
-
+from django.conf import settings
 from django.http import request
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistration, UserEditForm
 from .models import Category, Warranty, Product, Drone, AllocatedCustomer
+from django.http import FileResponse
+import os
 
 
 # Create your views here.
@@ -11,8 +13,27 @@ from .models import Category, Warranty, Product, Drone, AllocatedCustomer
 
 @login_required
 def dashboard(request):
-        warranties = Warranty.objects.all()
-        return render(request, 'dashboard.html', {'warranties': warranties})
+    warranties = Warranty.objects.all()
+    return render(request, 'dashboard.html', {'warranties': warranties})
+
+
+def ECN(request):
+    warranties = Warranty.objects.all()
+    return render(request, 'ecn_board.html', {'warranties': warranties})
+
+
+def download_file(request, file_path):
+    # Get the full file path
+    full_file_path = os.path.join(settings.MEDIA_ROOT, file_path)
+
+    # Open the file for reading
+    with open(full_file_path, 'rb') as file:
+        response = FileResponse(file)
+        # Set the content type for the response
+        response['Content-Type'] = 'application/octet-stream'
+        # Set the Content-Disposition header to force download
+        response['Content-Disposition'] = f'attachment; filename="{os.path.basename(full_file_path)}"'
+        return response
 
 
 def register(request):
