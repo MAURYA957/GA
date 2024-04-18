@@ -75,16 +75,10 @@ class DroneForm(forms.ModelForm):
 
 
 class DroneConfigrationForm(forms.ModelForm):
-    drone_current_version = forms.ModelChoiceField(
-        queryset=ECN.objects.values_list('Drone_version', flat=True).distinct(), required=True)
-    CC_current_version = forms.ModelChoiceField(
-        queryset=ECN.objects.values_list('CC_version', flat=True).distinct(), required=True)
-    FCS_current_version = forms.ModelChoiceField(
-        queryset=ECN.objects.values_list('FCS_version', flat=True).distinct(), required=True)
-    BLL_current_version = forms.ModelChoiceField(
-        queryset=ECN.objects.values_list('BLL_version', flat=True).distinct(), required=True)
-
     class Meta:
         model = DroneConfigration
-        fields = ['drone_id', 'drone_current_version', 'CC_current_version', 'FCS_current_version',
-                  'BLL_current_version']
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add any additional customization to form fields here if needed

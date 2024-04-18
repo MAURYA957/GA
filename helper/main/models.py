@@ -5,8 +5,8 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
 # from .models import Profile
+from django.urls import reverse
 
 
 class UserRegistration(forms.ModelForm):
@@ -144,6 +144,31 @@ class ProductModel(models.Model):
     spec = models.FileField(upload_to='documents/productmodel/')
     description = models.TextField()
     created_on = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return self.model_name
+
+    def get_image_url(self):
+        """
+        Return the URL of the uploaded image.
+        """
+        if self.image:
+            return self.image.url
+        return None
+
+    def get_spec_url(self):
+        """
+        Return the URL of the uploaded file (spec).
+        """
+        if self.spec:
+            return self.spec.url
+        return None
+
+    def get_absolute_url(self):
+        """
+        Return the absolute URL of the product model instance.
+        """
+        return reverse('product-model-detail', args=[str(self.id)])
 
     def __str__(self):
         return self.model_name
@@ -301,18 +326,28 @@ class DroneConfigration(models.Model):
     created_on = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
+@receiver(post_save, sender=ECN)
 def update_latest_version(sender, instance, created, **kwargs):
     if created:
         # Retrieve the latest version data from the ECN model
         latest_version = ECN.objects.latest('release_date')
 
+        # Retrieve or create a default DroneConfigration object
+        config, created = DroneConfigration.objects.get_or_create(id=None)
+
+        # Retrieve the base version data from the Drone model
+        base_version_drone = Drone.objects.last()
+
         # Update the DroneConfigration model with the latest version data
-        config = DroneConfigration.objects.last()
         config.Latest_version_available = latest_version.release
         config.CC_Latest_version_available = latest_version.CC_version
         config.FCS_Latest_version_available = latest_version.FCS_version
         config.BLL_Latest_version_available = latest_version.BLL_version
+        config.Drone_base_version = base_version_drone.Drone_base_version
+        config.CC_base_version = base_version_drone.CC_base_version
+        config.FCS_base_version = base_version_drone.FCS_base_version
+        config.BLL_base_version = base_version_drone.BLL_base_version
         config.save()

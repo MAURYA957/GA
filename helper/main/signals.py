@@ -10,3 +10,6 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         profile = UserRegistrationModel.objects.create(user=instance)
         profile.save()
+
+
+d

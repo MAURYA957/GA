@@ -5,7 +5,8 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView, PasswordResetConfirmView,
     PasswordChangeView, PasswordChangeDoneView
 )
-from .views import edit, dashboard, register, ECN, Subscription, create_warranty, create_allocated_customer, create_Drone, update_config
+from .views import edit, dashboard, register, ECN, Subscription, create_warranty, create_allocated_customer, \
+    create_Drone, update_config, Warranty_data, product_model_spec, product_model_image, update_config, view_config
 from . import views
 
 app_name = 'authapp'
@@ -14,9 +15,11 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('edit/', edit, name='edit'),
     path('dashboard/', dashboard, name='dashboard'),
-    path('ecn_board/', views.ECN, name='ecn_board'),
+    path('warranty_data/', views.Warranty_data, name='warranty_data'),
+    path('ecn_board/', views.view_config, name='ecn_board'),
+    path('update_config/', views.update_config, name='update_config'),
     path('subscription/', views.Subscription, name='subscription'),
-    path('update/<int:config_id>/', views.update_config, name='update-config'),
+    path('update_config/<int:config_id>/', views.update_config, name='update-config'),
     path('drone_form/', views.create_Drone, name='drone_form'),
     path('customer_form/', views.create_allocated_customer, name='customer_form'),
     path('warranty/', views.create_warranty, name='warranty'),
@@ -43,4 +46,11 @@ urlpatterns = [
     path('reset/done/', PasswordResetCompleteView.as_view(
         template_name='authapp/password_reset_complete.html'),
         name='password_reset_complete'),
+    # URL pattern to serve product model image
+    path('product-model/<int:model_id>/image/', views.product_model_image, name='product-model-image'),
+
+    # URL pattern to serve product model specification file
+    path('product-model/<int:model_id>/spec/', views.product_model_spec, name='product-model-spec'),
+
+
 ]

@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.contrib import messages
-from django.http import request
-from django.shortcuts import render, redirect
+from django.http import request, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Category, Warranty, Product, Drone, AllocatedCustomer, DroneConfigration
 from django.http import FileResponse
 import os
-from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, DroneConfigrationForm, UserRegistration, UserEditForm
+from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, DroneConfigrationForm, UserRegistration, \
+    UserEditForm, ProductModel, DroneConfigrationForm
 
 
 # Create your views here.
@@ -14,8 +15,8 @@ from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, DroneConfigra
 
 @login_required
 def dashboard(request):
-    warranties = Warranty.objects.all()
-    return render(request, 'dashboard.html', {'warranties': warranties})
+    productmodels = ProductModel.objects.all()
+    return render(request, 'dashboard.html', {'productmodels': ProductModel})
 
 
 def ECN(request):
@@ -112,7 +113,7 @@ def create_Drone(request):
     return render(request, 'drone_form.html', {'form': form})
 
 
-def update_config(request, config_id):
+"""def update_config(request, config_id):
     config = DroneConfigration.objects.get(id=config_id)
     if request.method == 'POST':
         form = DroneConfigrationForm(request.POST, instance=config)
@@ -122,4 +123,41 @@ def update_config(request, config_id):
             return redirect('config-detail', config_id=config_id)  # Redirect to detail view
     else:
         form = DroneConfigrationForm(instance=config)
+    return render(request, 'update_config.html', {'form': form})"""
+
+
+def Warranty_data(request):
+    return render(request, 'warranty_data.html')
+
+
+def product_model_image(request, model_id):
+    product_model = get_object_or_404(ProductModel, pk=model_id)
+    image_url = product_model.get_image_url()  # Assuming you have defined a get_image_url() method in your ProductModel model
+    # Serve the image using HttpResponse
+    return HttpResponse(image_url)
+
+
+def product_model_spec(request, model_id):
+    product_model = get_object_or_404(ProductModel, pk=model_id)
+    spec_url = product_model.get_spec_url()  # Assuming you have defined a get_spec_url() method in your ProductModel model
+    # Serve the file using HttpResponse
+    return HttpResponse(spec_url)
+
+
+def view_config(request):
+    configurations = DroneConfigration.objects.all()  # Fetch all configurations
+    return render(request, 'ecn_board.html', {'configurations': configurations})
+
+
+def update_config(request, config_id):
+    config = DroneConfigration.objects.get(id=config_id)
+
+    if request.method == 'POST':
+        form = DroneConfigrationForm(request.POST, instance=config)
+        if form.is_valid():
+            form.save()
+            return redirect('view_config')  # Redirect to the correct URL pattern name
+    else:
+        form = DroneConfigrationForm(instance=config)
+
     return render(request, 'update_config.html', {'form': form})
