@@ -5,7 +5,7 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView, PasswordResetConfirmView,
     PasswordChangeView, PasswordChangeDoneView
 )
-from .views import edit, dashboard, register, ECN
+from .views import edit, dashboard, register, ECN, Subscription, create_warranty, create_allocated_customer, create_Drone, update_config
 from . import views
 
 app_name = 'authapp'
@@ -14,7 +14,12 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('edit/', edit, name='edit'),
     path('dashboard/', dashboard, name='dashboard'),
-    path('ecn_board/', ECN, name='ecn_board'),
+    path('ecn_board/', views.ECN, name='ecn_board'),
+    path('subscription/', views.Subscription, name='subscription'),
+    path('update/<int:config_id>/', views.update_config, name='update-config'),
+    path('drone_form/', views.create_Drone, name='drone_form'),
+    path('customer_form/', views.create_allocated_customer, name='customer_form'),
+    path('warranty/', views.create_warranty, name='warranty'),
     path('download/<path:file_path>/', views.download_file, name='download_file'),
     path('', LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='logged_out.html'), name='logout'),

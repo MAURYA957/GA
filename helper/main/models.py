@@ -2,6 +2,9 @@ from django.contrib.auth.models import User
 from django import forms
 from datetime import timedelta
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # from .models import Profile
 
@@ -57,7 +60,6 @@ expertise_choice = (
     ("6", "Developers")
 )
 
-
 department_choice = (
     ("1", "None"),
     ("2", "Planner"),
@@ -81,6 +83,14 @@ type_drone = (
     ("2", "Service"),
     ("3", "Sold"),
     ("4", "Training"),
+    ("5", "Others")
+)
+
+type_warranty = (
+    ("1", "None"),
+    ("2", "Warranty"),
+    ("3", "AMC"),
+    ("4", "CMC"),
     ("5", "Others")
 )
 
@@ -145,6 +155,13 @@ class Drone(models.Model):
     UIN = models.CharField(max_length=20, unique=True)
     drone_type = models.CharField(max_length=20, choices=type_drone, default=1)
     AVB = models.CharField(max_length=20)
+    Timble_module = models.CharField(max_length=20)
+    Subscription_date = models.DateField()
+    Subscription_end_date = models.DateField()
+    Drone_base_version = models.CharField(max_length=20)
+    CC_base_version = models.CharField(max_length=20)
+    FCS_base_version = models.CharField(max_length=20)
+    BLL_base_version = models.CharField(max_length=20)
     created_on = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -213,13 +230,14 @@ def get_city_choices(cls):
 
 class Warranty(models.Model):
     id = models.AutoField(primary_key=True)
+    Warranty_type = models.CharField(max_length=20, choices=type_warranty, default=1)
     primary_owner = models.ForeignKey(Customer, on_delete=models.CASCADE)
     secondry_owner = models.ForeignKey(AllocatedCustomer, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     product_model = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
     drone = models.ForeignKey(Drone, on_delete=models.CASCADE)
-    #uin = models.CharField(max_length=100, choices=get_uin_choices, default=None)
-    #city = models.CharField(max_length=100, choices=get_city_choices, default=None)
+    uin = models.CharField(max_length=20)
+    city = models.CharField(max_length=20)
     dispatch_date = models.DateField()
     delivery_date = models.DateField()
     start_date = models.DateField()
@@ -246,6 +264,10 @@ class Warranty(models.Model):
 class ECN(models.Model):
     id = models.AutoField(primary_key=True)
     release = models.CharField(max_length=100)
+    Drone_version = models.CharField(max_length=100)
+    CC_version = models.CharField(max_length=100)
+    FCS_version = models.CharField(max_length=100)
+    BLL_version = models.CharField(max_length=100)
     expertise = models.CharField(max_length=10, choices=expertise_choice, default=1)
     applicable_on = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
     type = models.CharField(max_length=20, choices=type_choice, default=1)
@@ -259,3 +281,38 @@ class ECN(models.Model):
 
     def __str__(self):
         return self.release
+
+
+class DroneConfigration(models.Model):
+    id = models.AutoField(primary_key=True)
+    drone_id = models.ForeignKey(Drone, on_delete=models.CASCADE)
+    Drone_base_version = models.CharField(max_length=20)
+    CC_base_version = models.CharField(max_length=20)
+    FCS_base_version = models.CharField(max_length=20)
+    BLL_base_version = models.CharField(max_length=20)
+    drone_current_version = models.CharField(max_length=20)
+    CC_current_version = models.CharField(max_length=20)
+    FCS_current_version = models.CharField(max_length=20)
+    BLL_current_version = models.CharField(max_length=20)
+    Latest_version_available = models.CharField(max_length=20)
+    CC_Latest_version_available = models.CharField(max_length=20)
+    FCS_Latest_version_available = models.CharField(max_length=20)
+    BLL_Latest_version_available = models.CharField(max_length=20)
+    created_on = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.id
+
+
+def update_latest_version(sender, instance, created, **kwargs):
+    if created:
+        # Retrieve the latest version data from the ECN model
+        latest_version = ECN.objects.latest('release_date')
+
+        # Update the DroneConfigration model with the latest version data
+        config = DroneConfigration.objects.last()
+        config.Latest_version_available = latest_version.release
+        config.CC_Latest_version_available = latest_version.CC_version
+        config.FCS_Latest_version_available = latest_version.FCS_version
+        config.BLL_Latest_version_available = latest_version.BLL_version
+        config.save()

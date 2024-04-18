@@ -1,11 +1,12 @@
 from django.conf import settings
+from django.contrib import messages
 from django.http import request
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegistration, UserEditForm
-from .models import Category, Warranty, Product, Drone, AllocatedCustomer
+from .models import Category, Warranty, Product, Drone, AllocatedCustomer, DroneConfigration
 from django.http import FileResponse
 import os
+from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, DroneConfigrationForm, UserRegistration, UserEditForm
 
 
 # Create your views here.
@@ -20,6 +21,10 @@ def dashboard(request):
 def ECN(request):
     warranties = Warranty.objects.all()
     return render(request, 'ecn_board.html', {'warranties': warranties})
+
+
+def Subscription(request):
+    return render(request, 'subscription.html')
 
 
 def download_file(request, file_path):
@@ -69,3 +74,52 @@ def edit(request):
         'form': user_form,
     }
     return render(request, 'edit.html', context=context)
+
+
+def create_warranty(request):
+    if request.method == 'POST':
+        form = WarrantyForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Warranty created successfully! Add new warranty')
+            return render(request, 'warranty.html')
+    else:
+        form = WarrantyForm()
+    return render(request, 'warranty.html', {'form': form})
+
+
+def create_allocated_customer(request):
+    if request.method == 'POST':
+        form = AllocatedCustomerForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Customer created successfully!, Add New Customer')
+            return render(request, 'customer_form.html')
+    else:
+        form = AllocatedCustomerForm()
+    return render(request, 'customer_form.html', {'form': form})
+
+
+def create_Drone(request):
+    if request.method == 'POST':
+        form = DroneForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Drone created successfully! Add new Drone')
+            return render(request, 'drone_form.html')
+    else:
+        form = DroneForm()
+    return render(request, 'drone_form.html', {'form': form})
+
+
+def update_config(request, config_id):
+    config = DroneConfigration.objects.get(id=config_id)
+    if request.method == 'POST':
+        form = DroneConfigrationForm(request.POST, instance=config)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Drone config updated successfully!')
+            return redirect('config-detail', config_id=config_id)  # Redirect to detail view
+    else:
+        form = DroneConfigrationForm(instance=config)
+    return render(request, 'update_config.html', {'form': form})

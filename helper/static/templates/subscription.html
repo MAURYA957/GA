@@ -123,8 +123,8 @@ html {
              <td>{{ warranty.secondry_owner_city }}</td>
              <td>{{ warranty.start_date }}</td>
              <td>{{ warranty.end_date }}</td>
-             <td><a href="#">Download</a></td>
-             <td><a href="#">Download</a></td>
+             <td><a href="{{ warranty.handover_doc.url }}">Download</a></td>
+             <td><a href="{{ warranty.dispatch_list.url }}">Download</a></td>
             </tr>
             {% endfor %}
         </table>
@@ -132,7 +132,7 @@ html {
 <h3></h3>
 {% endblock %}
 
-    {% include 'footer.html' %}
+{% include 'footer.html' %}
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
