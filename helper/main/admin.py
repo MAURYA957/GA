@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Category, AddItem
-from .models import ProductModel, Product, Warranty, ECN, Drone, Customer, AllocatedCustomer, District, State, Country
+from .models import ProductModel, Product, Warranty, ECN, Drone, Customer, AllocatedCustomer, District, State, Country, \
+    DroneConfigration
 from django.contrib import admin
 
 
@@ -71,3 +72,9 @@ class StateAdmin(admin.ModelAdmin):
 @admin.register(District)
 class DistrictAdmin(admin.ModelAdmin):
     list_display = ['id', 'state_name', 'country', 'District_name']
+
+
+@admin.register(DroneConfigration)
+class DroneConfigrationAdmin(admin.ModelAdmin):
+    list_display = ['id', 'drone_id', 'drone_current_version', 'CC_current_version', 'FCS_current_version',
+                    'BLL_current_version']

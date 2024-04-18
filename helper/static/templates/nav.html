@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Include Font Awesome library -->
@@ -87,7 +87,7 @@ body {
 }
 
 /* Add a red background color to navbar links on hover */
-.navbar a:hover, .dropdown:hover .dropbtn {
+#navbar a:hover, .dropdown:hover .dropbtn {
   background-color: red;
 }
 
@@ -119,17 +119,20 @@ body {
 .dropdown:hover .dropdown-content {
   display: block;
 }
-
-/* Adjust dropdown position */
-.dropdown-content {
-  top: 100%;
-}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h2>Welcome to General Aeronautics Aftersales Interface</h2>
+  {% if request.user.is_authenticated %}
+    <p align="right"><a href="{% url 'authapp:login' %}" class="btn btn-danger">Logout</a>
+    <span><a class="greet">Welcome {{request.user}}</a></span>
+    {% else %}
+    <div>
+      <a href="{% url 'authapp:login' %}" class="btn btn-secondary">Log-in</a>
+      <a href="{% url 'authapp:register' %}" class="btn btn-info ">Register</a>
+    </div></p>
+    {% endif %}
 </div>
 
 <div id="navbar">
@@ -139,6 +142,7 @@ body {
   <a href="javascript:void(0)">ECN_Board</a>
   <a href="javascript:void(0)">Subscription_Board</a>
   {% if request.user.is_staff %}
+  <a href="javascript:void(0)">Add_Warranty</a>
   <div class="dropdown">
     <button class="dropbtn">Add_data
       <i class="fa fa-caret-down"></i>
@@ -152,15 +156,6 @@ body {
     </div>
   </div>
   <span>
-    {% endif %}
-    {% if request.user.is_authenticated %}
-    <a href="{% url 'authapp:login' %}" class="btn btn-danger">Logout</a>
-    <span><a class="greet">Welcome {{request.user}}</a></span>
-    {% else %}
-    <div class="navbar">
-      <a href="{% url 'authapp:login' %}" class="btn btn-secondary">Log-in</a>
-      <a href="{% url 'authapp:register' %}" class="btn btn-info ">Register</a>
-    </div>
     {% endif %}
   </span>
 </div>
