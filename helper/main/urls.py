@@ -5,21 +5,21 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView, PasswordResetConfirmView,
     PasswordChangeView, PasswordChangeDoneView
 )
-from .views import edit, dashboard, register, ECN, Subscription, create_warranty, create_allocated_customer, \
-    create_Drone, update_config, Warranty_data, product_model_spec, product_model_image, update_config, view_config
+from .views import dashboard, success_view, register, ECN, Subscription, create_warranty, create_allocated_customer, create_Drone, Warranty_data, product_model_spec, product_model_image, view_config, update_config
 from . import views
 
 app_name = 'authapp'
 
 urlpatterns = [
     path('register/', register, name='register'),
-    path('edit/', edit, name='edit'),
+    path('success/', views.success_view, name='success'),
+    #path('edit/', edit, name='edit'),
     path('dashboard/', dashboard, name='dashboard'),
     path('warranty_data/', views.Warranty_data, name='warranty_data'),
     path('ecn_board/', views.view_config, name='ecn_board'),
     path('update_config/', views.update_config, name='update_config'),
     path('subscription/', views.Subscription, name='subscription'),
-    path('update_config/<int:config_id>/', views.update_config, name='update-config'),
+    #path('update_config/<int:config_id>/', views.update_config, name='update-config'),
     path('drone_form/', views.create_Drone, name='drone_form'),
     path('customer_form/', views.create_allocated_customer, name='customer_form'),
     path('warranty/', views.create_warranty, name='warranty'),

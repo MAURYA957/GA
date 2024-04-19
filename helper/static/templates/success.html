@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Creation Success</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light grey background */
+        }
+        .container {
+            margin-top: 50px; /* Add some margin from the top */
+        }
+        .btn {
+            margin-right: 10px; /* Add some space between buttons */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center">User Created Successfully!</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-center">Congratulations, the user has been created successfully.</p>
+                        <div class="text-center">
+                            <a href="{% url 'authapp:dashboard' %}" class="btn btn-primary">Back to Home</a>
+                            <a href="{% url 'authapp:register' %}" class="btn btn-success">Add New User</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

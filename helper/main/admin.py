@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import Category, AddItem
 from .models import ProductModel, Product, Warranty, ECN, Drone, Customer, AllocatedCustomer, District, State, Country, \
-    DroneConfigration
+    DroneConfigration, User, UserType, SOP
+
 from django.contrib import admin
 
 
@@ -78,3 +79,31 @@ class DistrictAdmin(admin.ModelAdmin):
 class DroneConfigrationAdmin(admin.ModelAdmin):
     list_display = ['id', 'drone_id', 'drone_current_version', 'CC_current_version', 'FCS_current_version',
                     'BLL_current_version']
+
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['name', 'contact_no', 'user_mail', 'user_type', 'country', 'state_name', 'district', 'created_on']
+    search_fields = ['name', 'contact_no', 'user_mail']
+    list_filter = ['user_type', 'country', 'state_name', 'district']
+    readonly_fields = ['created_on']  # Making created_on field read-only
+
+
+admin.site.register(User, UserAdmin)
+
+
+class SOPAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'sop_type', 'drone_model', 'created_on']
+    search_fields = ['name', 'slug', 'sop_type']
+    list_filter = ['sop_type', 'drone_model']
+    readonly_fields = ['created_on']  # Making created_on field read-only
+
+
+admin.site.register(SOP, SOPAdmin)
+
+
+class UserTypeAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    search_fields = ['name']
+
+
+admin.site.register(UserType, UserTypeAdmin)

@@ -7,28 +7,7 @@ from django.dispatch import receiver
 
 # from .models import Profile
 from django.urls import reverse
-
-
-class UserRegistration(forms.ModelForm):
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(
-        label='Repeat Password', widget=forms.PasswordInput)
-
-    class Meta:
-        model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
-
-        def clean_password2(self):
-            cd = self.cleaned_data
-            if cd['password'] != cd['password2']:
-                raise forms.ValidationError('Passwords don\'t match.')
-            return cd['password2']
-
-
-class UserEditForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email')
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -93,6 +72,33 @@ type_warranty = (
     ("4", "CMC"),
     ("5", "Others")
 )
+
+
+class UserType(models.Model):
+    # Define user types, e.g., 'Admin', 'Regular User', etc.
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class User(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    contact_no = models.CharField(
+        max_length=100)  # Change to CharField as contact numbers can contain non-numeric characters
+    user_mail = models.EmailField(max_length=100)  # Change field name to lowercase for consistency
+    user_type = models.ForeignKey(UserType, on_delete=models.CASCADE)  # Change field name to lowercase for consistency
+    country = models.CharField(max_length=100)
+    state_name = models.CharField(max_length=100)
+    district = models.CharField(max_length=100)
+    user_profile = models.ImageField(upload_to='users/%Y/%m', blank=True)  # Change '%M' to '%m' for month in lowercase
+    password = models.CharField(max_length=100, blank=True)
+    created_on = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name
 
 
 class Country(models.Model):
@@ -300,7 +306,7 @@ class ECN(models.Model):
     department = models.CharField(max_length=50, choices=department_choice, default=1)
     release_by = models.CharField(max_length=100)
     release_date = models.DateField()
-    desc = models.CharField(max_length=1000)
+    desc = models.CharField(max_length=2000)
     sop = models.FileField(upload_to='documents/SOP/')
     created_on = models.DateField(auto_now_add=True)
 
@@ -311,43 +317,26 @@ class ECN(models.Model):
 class DroneConfigration(models.Model):
     id = models.AutoField(primary_key=True)
     drone_id = models.ForeignKey(Drone, on_delete=models.CASCADE)
-    Drone_base_version = models.CharField(max_length=20)
-    CC_base_version = models.CharField(max_length=20)
-    FCS_base_version = models.CharField(max_length=20)
-    BLL_base_version = models.CharField(max_length=20)
     drone_current_version = models.CharField(max_length=20)
     CC_current_version = models.CharField(max_length=20)
     FCS_current_version = models.CharField(max_length=20)
     BLL_current_version = models.CharField(max_length=20)
-    Latest_version_available = models.CharField(max_length=20)
-    CC_Latest_version_available = models.CharField(max_length=20)
-    FCS_Latest_version_available = models.CharField(max_length=20)
-    BLL_Latest_version_available = models.CharField(max_length=20)
     created_on = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return str(self.id)
 
 
-@receiver(post_save, sender=ECN)
-def update_latest_version(sender, instance, created, **kwargs):
-    if created:
-        # Retrieve the latest version data from the ECN model
-        latest_version = ECN.objects.latest('release_date')
 
-        # Retrieve or create a default DroneConfigration object
-        config, created = DroneConfigration.objects.get_or_create(id=None)
+class SOP(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=200, unique=True)
+    user_types = models.ManyToManyField(UserType)  # Changed field name to lowercase and removed on_delete attribute
+    drone_model = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+    sop_type = models.CharField(max_length=100)  # Added max_length parameter to SOP_Type field
+    document = models.ImageField(upload_to='Documents/KB/SOP', blank=True)
+    created_on = models.DateTimeField()
 
-        # Retrieve the base version data from the Drone model
-        base_version_drone = Drone.objects.last()
-
-        # Update the DroneConfigration model with the latest version data
-        config.Latest_version_available = latest_version.release
-        config.CC_Latest_version_available = latest_version.CC_version
-        config.FCS_Latest_version_available = latest_version.FCS_version
-        config.BLL_Latest_version_available = latest_version.BLL_version
-        config.Drone_base_version = base_version_drone.Drone_base_version
-        config.CC_base_version = base_version_drone.CC_base_version
-        config.FCS_base_version = base_version_drone.FCS_base_version
-        config.BLL_base_version = base_version_drone.BLL_base_version
-        config.save()
+    def __str__(self):
+        return self.name

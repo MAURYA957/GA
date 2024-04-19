@@ -3,11 +3,10 @@ from django.contrib import messages
 from django.http import request, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Category, Warranty, Product, Drone, AllocatedCustomer, DroneConfigration
+from .models import Category, Warranty, Product, Drone, AllocatedCustomer, DroneConfigration, ECN, User
 from django.http import FileResponse
 import os
-from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, DroneConfigrationForm, UserRegistration, \
-    UserEditForm, ProductModel, DroneConfigrationForm
+from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, ProductModel, DroneConfigrationForm, UserRegistrationForm
 
 
 # Create your views here.
@@ -44,25 +43,16 @@ def download_file(request, file_path):
 
 def register(request):
     if request.method == 'POST':
-        form = UserRegistration(request.POST or None)
+        form = UserRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            new_user = form.save(commit=False)
-            new_user.set_password(
-                form.cleaned_data.get('password')
-            )
-            new_user.save()
-            return render(request, 'register_done.html')
+            form.save()
+            return render(request, 'success.html')  # Redirect to a success page after registration
     else:
-        form = UserRegistration()
-
-    context = {
-        "form": form
-    }
-
-    return render(request, 'register.html', context=context)
+        form = UserRegistrationForm()
+    return render(request, 'register.html', {'form': form})
 
 
-@login_required
+""""@login_required
 def edit(request):
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user,
@@ -74,7 +64,7 @@ def edit(request):
     context = {
         'form': user_form,
     }
-    return render(request, 'edit.html', context=context)
+    return render(request, 'edit.html', context=context)"""
 
 
 def create_warranty(request):
@@ -149,15 +139,18 @@ def view_config(request):
     return render(request, 'ecn_board.html', {'configurations': configurations})
 
 
-def update_config(request, config_id):
-    config = DroneConfigration.objects.get(id=config_id)
-
+def update_config(request):
     if request.method == 'POST':
-        form = DroneConfigrationForm(request.POST, instance=config)
+        form = DroneConfigrationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('view_config')  # Redirect to the correct URL pattern name
+            messages.success(request, 'Config updated successfully!')
+            # Redirect to the view_config page after successful update
+            return redirect('view_config.html')
     else:
-        form = DroneConfigrationForm(instance=config)
-
+        form = DroneConfigrationForm()
     return render(request, 'update_config.html', {'form': form})
+
+
+def success_view(request):
+    return render(request, 'success.html')  # Assuming you have a template named 'success.html'

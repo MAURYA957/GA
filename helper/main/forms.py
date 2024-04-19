@@ -6,12 +6,28 @@ from django.contrib.auth.models import User
 from .models import Warranty, Customer, AllocatedCustomer, Product, ProductModel, Drone, Country, State, District, \
     DroneConfigration, ECN
 from datetime import timedelta
+from django.contrib.auth.hashers import make_password
+from .models import User
 
 
-class createuserform(UserCreationForm):
+class UserRegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ['name', 'contact_no', 'user_mail', 'user_type', 'country', 'state_name', 'district', 'user_profile', 'password']
+
+    def clean_contact_no(self):
+        contact_no = self.cleaned_data['contact_no']
+        if not contact_no.isdigit():  # Check if contact number contains only digits
+            raise forms.ValidationError("Contact number should contain only digits.")
+        return contact_no
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if len(password) < 8:
+            raise forms.ValidationError("Password must be at least 8 characters long.")
+        return make_password(password)  # Hash the password for security
 
 
 """class WarrantyForm(forms.ModelForm):
@@ -75,10 +91,16 @@ class DroneForm(forms.ModelForm):
 
 
 class DroneConfigrationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(DroneConfigrationForm, self).__init__(*args, **kwargs)
+
+        # Retrieve unique values for each field
+        self.fields['drone_current_version'].queryset = ECN.objects.values_list('Drone_version', flat=True).distinct()
+        self.fields['CC_current_version'].queryset = ECN.objects.values_list('CC_version', flat=True).distinct()
+        self.fields['FCS_current_version'].queryset = ECN.objects.values_list('FCS_version', flat=True).distinct()
+        self.fields['BLL_current_version'].queryset = ECN.objects.values_list('BLL_version', flat=True).distinct()
+
     class Meta:
         model = DroneConfigration
-        fields = '__all__'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Add any additional customization to form fields here if needed
+        fields = ['drone_id', 'drone_current_version', 'CC_current_version', 'FCS_current_version',
+                  'BLL_current_version']
