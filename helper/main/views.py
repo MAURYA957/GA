@@ -3,28 +3,30 @@ from django.contrib import messages
 from django.http import request, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Category, Warranty, Product, Drone, AllocatedCustomer, DroneConfigration, ECN, User
+from .models import Category, Warranty, Product, Drone, AllocatedCustomer, ECN, User, DroneConfiguration
 from django.http import FileResponse
 import os
-from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, ProductModel, DroneConfigrationForm, UserRegistrationForm, SOPForm
+from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, ProductModel, UserRegistrationForm, SOPForm, updateConfigurationForm, DroneConfigurationForm
+from .forms import DroneConfigurationForm, DroneUpdateForm
 
 
 # Create your views here.
 
-
-@login_required
-def dashboard(request):
-    productmodels = ProductModel.objects.all()
-    return render(request, 'dashboard.html', {'productmodels': ProductModel})
-
-
-def ECN(request):
-    warranties = Warranty.objects.all()
-    return render(request, 'ecn_board.html', {'warranties': warranties})
-
-
 def Subscription(request):
-    return render(request, 'subscription.html')
+    drones = Drone.objects.all()
+    return render(request, 'Subscription.html', {'drones': drones})
+
+def update_drone(request, id):  # Add the 'id' parameter
+    drone = get_object_or_404(Drone, id=id)  # Retrieve the drone object based on the id
+    if request.method == 'POST':
+        form = DroneUpdateForm(request.POST, instance=drone)
+        if form.is_valid():
+            form.save()
+            return render(request, 'Subscription.html.html')
+            # Redirect to a success page or render a template
+    else:
+        form = DroneUpdateForm(instance=drone)
+    return render(request, 'update_subs.html', {'form': form})
 
 
 def download_file(request, file_path):
@@ -103,19 +105,6 @@ def create_Drone(request):
     return render(request, 'drone_form.html', {'form': form})
 
 
-"""def update_config(request, config_id):
-    config = DroneConfigration.objects.get(id=config_id)
-    if request.method == 'POST':
-        form = DroneConfigrationForm(request.POST, instance=config)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Drone config updated successfully!')
-            return redirect('config-detail', config_id=config_id)  # Redirect to detail view
-    else:
-        form = DroneConfigrationForm(instance=config)
-    return render(request, 'update_config.html', {'form': form})"""
-
-
 def Warranty_data(request):
     warranties = Warranty.objects.all()
     return render(request, 'warranty_data.html', {'warranties': warranties})
@@ -135,22 +124,10 @@ def product_model_spec(request, model_id):
     return HttpResponse(spec_url)
 
 
-def view_config(request):
-    configurations = DroneConfigration.objects.all()  # Fetch all configurations
-    return render(request, 'ecn_board.html', {'configurations': configurations})
-
-
-def update_config(request):
-    if request.method == 'POST':
-        form = DroneConfigrationForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Config updated successfully!')
-            # Redirect to the view_config page after successful update
-            return redirect('view_config.html')
-    else:
-        form = DroneConfigrationForm()
-    return render(request, 'update_config.html', {'form': form})
+@login_required
+def dashboard(request):
+    productmodels = ProductModel.objects.all()
+    return render(request, 'dashboard.html', {'productmodels': productmodels})
 
 
 def success_view(request):
@@ -169,3 +146,38 @@ def create_sop(request):
     else:
         form = SOPForm()
     return render(request, 'create_sop.html', {'form': form})
+
+
+def Add_data(request):
+    return render(request, 'data.html')
+
+
+def view_config(request):
+    drone_configurations = DroneConfiguration.objects.all()
+    return render(request, 'ecn_board.html', {'drone_configurations': drone_configurations})
+
+
+def update_config(request, config_id):
+    config = get_object_or_404(DroneConfiguration, pk=config_id)
+    if request.method == 'POST':
+        form = updateConfigurationForm(request.POST, instance=config)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Configuration updated successfully.')
+            # Redirect to the ECN board page after successful update
+            return redirect('authapp:ecn_board')
+    else:
+        form = DroneConfigurationForm(instance=config)
+    return render(request, 'update_config.html', {'form': form})
+
+
+def create_drone_configuration(request):
+    if request.method == 'POST':
+        form = DroneConfigurationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Redirect to a success page or do any other processing
+            return redirect('ecn_board')  # Replace 'success_page' with the name of your success page URL pattern
+    else:
+        form = DroneConfigurationForm()
+    return render(request, 'create_config.html', {'form': form})

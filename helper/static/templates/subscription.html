@@ -1,145 +1,97 @@
 {% include 'nav.html' %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-<style>
-html {
-  box-sizing: border-box;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <style>
+        /* Add custom styles here */
+        /* Customize DataTables styles */
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+        }
 
-*, *:before, *:after {
-  box-sizing: inherit;
-}
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: #0056b3;
+        }
 
-.column {
-  float: left;
-  width: 33.3%;
-  margin-bottom: 16px;
-  padding: 0 8px;
-}
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #0056b3;
+        }
 
-@media screen and (max-width: 650px) {
-  .column {
-    width: 100%;
-    display: block;
-  }
-}
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            padding: 6px;
+        }
 
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-}
+        .dataTables_wrapper .dataTables_filter input:focus {
+            outline: none;
+            box-shadow: 0 0 5px #007bff;
+        }
 
-.container {
-  padding: 0 16px;
-}
-
-.container::after, .row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.title {
-  color: grey;
-}
-
-.button {
-  border: none;
-  outline: 0;
-  display: inline-block;
-  padding: 8px;
-  color: white;
-  background-color: #000;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-}
-
-.button:hover {
-  background-color: green;
-}
-
-/* Customize DataTables styles */
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 5px;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-  background-color: #0056b3;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-  background-color: #0056b3;
-}
-
-.dataTables_wrapper .dataTables_filter input {
-  border: 1px solid #007bff;
-  border-radius: 5px;
-  padding: 6px;
-}
-
-.dataTables_wrapper .dataTables_filter input:focus {
-  outline: none;
-  box-shadow: 0 0 5px #007bff;
-}
-
-.dataTables_wrapper .dataTables_scrollHead th {
-  background-color: #f2f2f2;
-  color: #000;
-}
-</style>
+        .dataTables_wrapper .dataTables_scrollHead th {
+            background-color: #f2f2f2;
+            color: #000;
+        }
+    </style>
 </head>
 <body>
 
-<br>
-
-<div class="row">
-{% block content %}
-    <ul>
-        <table id="warranties-table" style="width:100%" border="1px solid black" border-collapse="collapse">
-        <thead>
-            <tr>
-                <th>Drone id</th>
-                <th>UIN</th>
-                <th>Model</th>
-                <th>Customer</th>
-                <th>Location</th>
-                <th>Warranty start_date</th>
-                <th>Warranty End date</th>
-                <th>Handover Document</th>
-                <th>Dispatch list</th>
-            </tr>
-        </thead>
-            {% for warranty in warranties %}
-            <tr>
-             <td>{{ warranty.drone }}</td>
-             <td>{{ warranty.drone_uin }}</td>
-             <td>{{ warranty.product_model }}</td>
-             <td>{{ warranty.secondry_owner }}</td>
-             <td>{{ warranty.secondry_owner_city }}</td>
-             <td>{{ warranty.start_date }}</td>
-             <td>{{ warranty.end_date }}</td>
-             <td><a href="{{ warranty.handover_doc.url }}">Download</a></td>
-             <td><a href="{{ warranty.dispatch_list.url }}">Download</a></td>
-            </tr>
-            {% endfor %}
-        </table>
-    </ul>
-<h3></h3>
-{% endblock %}
-
-{% include 'footer.html' %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <table id="warranties-table" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Drone ID</th>
+                    <th>Drone Type</th>
+                    <th>AVB ID</th>
+                    <th>Trimble Module</th>
+                    <th>Subscription Date</th>
+                    <th>Subscription End Date</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for drone in drones %}
+                <tr>
+                    <td>{{ drone.Drone_id }}</td>
+                    <td>{{ drone.drone_type }}</td>
+                    <td>{{ drone.AVB_id }}</td>
+                    <td>{{ drone.Trimble_module }}</td>
+                    <td>{{ drone.Subscription_date }}</td>
+                    <td>{{ drone.Subscription_end_date }}</td>
+                    <td>
+                        {% if user.is_authenticated and user.is_staff %}
+                        <button class="btn btn-primary btn-update" onclick="updateConfig('{{ drone.id }}')">Update</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-$(document).ready( function () {
-    $('#warranties-table').DataTable();
-} );
+    $(document).ready(function () {
+        $('#warranties-table').DataTable();
+    });
+
+    function updateConfig(id) {
+        window.location.href = `/update_subs/${id}`;
+    }
 </script>
 </body>
 </html>

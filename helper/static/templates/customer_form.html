@@ -1,4 +1,4 @@
-{% include 'nav.html' %}
+{% include 'navdata.html' %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +28,7 @@
                     <h2 class="text-center">Create Customer</h2>
                 </div>
                 <div class="card-body">
-                    <form method="post" enctype="multipart/form-data" id="customerForm">
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.as_p }}
                         <button type="submit" class="btn btn-primary btn-block mt-4">Submit</button>
@@ -45,48 +45,15 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 <script>
-$(document).ready(function() {
-    $('#id_AllocatedCustomer_country').change(function() {
-        var countryId = $(this).val();
-        if (countryId) {
-            $.ajax({
-                url: '/get-states/' + countryId + '/',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    $('#id_AllocatedCustomer_state').empty();
-                    $('#id_AllocatedCustomer_state').append('<option value="">---------</option>');
-                    $.each(data, function(key, value) {
-                        $('#id_AllocatedCustomer_state').append('<option value="' + key + '">' + value + '</option>');
-                    });
-                }
-            });
-        } else {
-            $('#id_AllocatedCustomer_state').empty();
-        }
-    });
+function selectState(countryId) {
+    // Here you can make an AJAX request to fetch states based on the selected country
+}
 
-    $('#id_AllocatedCustomer_state').change(function() {
-        var stateId = $(this).val();
-        if (stateId) {
-            $.ajax({
-                url: '/get-districts/' + stateId + '/',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    $('#id_AllocatedCustomer_district').empty();
-                    $('#id_AllocatedCustomer_district').append('<option value="">---------</option>');
-                    $.each(data, function(key, value) {
-                        $('#id_AllocatedCustomer_district').append('<option value="' + key + '">' + value + '</option>');
-                    });
-                }
-            });
-        } else {
-            $('#id_AllocatedCustomer_district').empty();
-        }
-    });
-});
+function selectDistrict(stateId) {
+    // Here you can make an AJAX request to fetch districts based on the selected state
+}
 </script>
 
 </body>

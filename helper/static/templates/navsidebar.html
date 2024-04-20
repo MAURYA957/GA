@@ -2,7 +2,10 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Include Font Awesome library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <style>
 body {
@@ -12,14 +15,14 @@ body {
 }
 
 .header {
-  background-color: #EEF8FB;
+  background-color: #ADD8E6; /* Change to light sky blue */
   padding: 10px 0;
   text-align: center;
 }
 
 #navbar {
   overflow: hidden;
-  background-color: #333;
+  background-color: #007bff; /* Change to darker blue */
 }
 
 #greet {
@@ -43,48 +46,14 @@ body {
 }
 
 #navbar a:hover {
-  background-color: #ddd;
-  color: black;
+  background-color: #5f9ea1; /* Change hover color to turquoise */
+  color: white;
+  font-weight: bold; /* Make font bold on hover */
 }
 
 #navbar a.active {
   background-color: #04AA6D;
   color: white;
-}
-
-.sidebar {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #333;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-}
-
-.sidebar a {
-  padding: 10px 15px;
-  text-decoration: none;
-  font-size: 20px;
-  color: #f2f2f2;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidebar a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-.sidebar .close-btn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
 }
 
 .content {
@@ -99,6 +68,71 @@ body {
 
 .sticky + .content {
   padding-top: 60px;
+}
+
+/* Dropdown container */
+.dropdown {
+  float: left;
+  position: relative;
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit; /* Important for vertical align on mobile phones */
+  margin: 0; /* Important for vertical align on mobile phones */
+  cursor: pointer;
+}
+
+/* Add a red background color to navbar links on hover */
+#navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Left side scrollable sidebar */
+.sidebar {
+  height: 100%;
+  width: 250px; /* Adjust the width as needed */
+  position: fixed;
+  left: 0;
+  background-color: #f8f9fa; /* Background color for the sidebar */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-top: 20px;
+  top: 56px; /* Initial top position, matches the height of the navbar */
 }
 </style>
 </head>
@@ -117,7 +151,6 @@ body {
 </div>
 
 <div id="navbar">
-  <span class="open-btn" onclick="openNav()">&#9776; Open</span>
   <a href="{% url 'authapp:dashboard' %}">Home</a>
   <a href="javascript:void(0)">Knowledge_Base</a>
   <a href="{% url 'authapp:warranty_data' %}">Warranty_Board</a>
@@ -125,29 +158,59 @@ body {
   <a href="{% url 'authapp:subscription' %}">Subscription_Board</a>
   {% if request.user.is_staff %}
   <a href="{% url 'authapp:warranty' %}">Add Warranty</a>
-  <a href="#">Add_ECN</a>
+  <a href="{% url 'authapp:register' %}">Add User</a>
+  <a href="{% url 'authapp:customer_form' %}">Add_Owner</a>
   <a href="{% url 'authapp:drone_form' %}">Add_Drone</a>
-  <a href="#">Add_SOP</a>
-  {% endif %}
+  <a href="{% url 'authapp:create_sop' %}">Add_SOP</a>
+    {% endif %}
+  </span>
 </div>
 
-<div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
-  <a href="#">Add_warranty</a>
-  <a href="#">Add_1</a>
+<div class="sidebar" id="mySidebar">
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
+  <a href="#">Link 3</a>
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
+  <a href="#">Link 3</a>
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
+  <a href="#">Link 3</a>
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
+  <a href="#">Link 3</a>
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
+  <a href="#">Link 3</a>
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
+  <a href="#">Link 3</a>
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
+  <a href="#">Link 3</a>
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
+  <a href="#">Link 3</a>
+  <a href="#">Link 1</a>
+  <a href="#">Link 2</a>
   <a href="#">Link 3</a>
 </div>
-{% block contant %}
 
-{% endblock %}
+<div class="content">
+  <!-- Your main content here -->
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
-function openNav() {
-  document.getElementById("mySidebar").style.width = "250px";
-}
-
-function closeNav() {
-  document.getElementById("mySidebar").style.width = "0";
-}
+// Dynamically adjust the top position of the sidebar
+window.addEventListener('DOMContentLoaded', (event) => {
+  var navbarHeight = document.getElementById('navbar').offsetHeight;
+  document.getElementById('mySidebar').style.top = navbarHeight + 'px';
+});
 </script>
 
 </body>

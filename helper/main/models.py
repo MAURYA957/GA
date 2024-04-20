@@ -189,10 +189,6 @@ class Drone(models.Model):
     Timble_module = models.CharField(max_length=20)
     Subscription_date = models.DateField()
     Subscription_end_date = models.DateField()
-    Drone_base_version = models.CharField(max_length=20)
-    CC_base_version = models.CharField(max_length=20)
-    FCS_base_version = models.CharField(max_length=20)
-    BLL_base_version = models.CharField(max_length=20)
     created_on = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -314,17 +310,40 @@ class ECN(models.Model):
         return self.release
 
 
-class DroneConfigration(models.Model):
+from django.db.models import Max
+
+
+class DroneConfiguration(models.Model):
     id = models.AutoField(primary_key=True)
     drone_id = models.ForeignKey(Drone, on_delete=models.CASCADE)
+    Drone_base_version = models.CharField(max_length=20)
+    CC_base_version = models.CharField(max_length=20)
+    FCS_base_version = models.CharField(max_length=20)
+    BLL_base_version = models.CharField(max_length=20)
     drone_current_version = models.CharField(max_length=20)
     CC_current_version = models.CharField(max_length=20)
     FCS_current_version = models.CharField(max_length=20)
     BLL_current_version = models.CharField(max_length=20)
+    Available_Drone_version = models.CharField(max_length=100, blank=True)
+    Available_CC_version = models.CharField(max_length=100, blank=True)
+    Available_FCS_version = models.CharField(max_length=100, blank=True)
+    Available_BLL_version = models.CharField(max_length=100, blank=True)
     created_on = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.id)
+        return f"Drone Configuration: {self.id}"
+
+    def save(self, *args, **kwargs):
+        # Get the latest release from ECN model
+        latest_release = ECN.objects.aggregate(Max('release'))['release__max']
+        if latest_release:
+            latest_release_data = ECN.objects.filter(release=latest_release).first()
+            # Fill the Available_*_version fields with data from the latest release
+            self.Available_Drone_version = latest_release_data.Drone_version
+            self.Available_CC_version = latest_release_data.CC_version
+            self.Available_FCS_version = latest_release_data.FCS_version
+            self.Available_BLL_version = latest_release_data.BLL_version
+        super().save(*args, **kwargs)
 
 
 class SOP(models.Model):
@@ -333,7 +352,8 @@ class SOP(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
     user_types = models.ManyToManyField(UserType)  # Changed field name to lowercase and removed on_delete attribute
     drone_model = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
-    sop_type = models.CharField(max_length=20, choices=type_choice, default=1)  # Added max_length parameter to SOP_Type field
+    sop_type = models.CharField(max_length=20, choices=type_choice,
+                                default=1)  # Added max_length parameter to SOP_Type field
     department = models.CharField(max_length=50, choices=department_choice, default=1)
     desc = models.TextField(max_length=2000)
     document = models.FileField(upload_to='Documents/KB/SOP', blank=True)

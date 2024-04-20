@@ -1,0 +1,46 @@
+{% include 'navdata.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <style>
+        /* Add custom CSS styles here */
+        .card-img-top {
+            max-height: 200px; /* Adjust the max height of the image */
+            object-fit: cover; /* Ensure the image covers the entire container */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Welcome to our website!</h1>
+    <h2>Categories</h2>
+    <div class="row">
+        {% for productModel in productModels %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="{{ product_model.get_image_url }}" class="card-img-top" alt="{{ productModel.model_name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ productModel.model_name }}</h5>
+                        <a href="{{ product_model.get_spec_url }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        // Initialize DataTables if needed
+        // $('#warranties-table').DataTable();
+    });
+</script>
+</body>
+</html>

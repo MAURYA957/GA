@@ -138,12 +138,14 @@ body {
 
 <div id="navbar">
   <a href="{% url 'authapp:dashboard' %}">Home</a>
-  <a href="javascript:void(0)">Knowledge_Base</a>
-  <a href="{% url 'authapp:warranty_data' %}">Warranty_Board</a>
-  <a href="{% url 'authapp:ecn_board' %}">ECN_Board</a>
-  <a href="{% url 'authapp:subscription' %}">Subscription_Board</a>
   {% if request.user.is_staff %}
-  <a href="{% url 'authapp:data' %}">Add data</a>
+  <a href="{% url 'authapp:warranty' %}">Add Warranty</a>
+  <a href="{% url 'authapp:register' %}">Add User</a>
+  <a href="{% url 'authapp:customer_form' %}">Add_Owner</a>
+  <a href="{% url 'authapp:drone_form' %}">Add_Drone</a>
+  <a href="{% url 'authapp:create_sop' %}">Add_SOP</a>
+  <a href="{% url 'authapp:drone_form' %}">Add_ECN</a>
+  <a href="{% url 'authapp:create_config' %}">Add_Config</a>
     {% endif %}
   </span>
 </div>

@@ -5,51 +5,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update config</title>
+    <title>Update Configuration</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Custom CSS -->
     <style>
-        body {
-            background-color: #f8f9fa; /* Light grey background */
+        /* Custom CSS to center the card and adjust its size */
+        .custom-card {
+            max-width: 400px; /* Set the maximum width of the card */
+            margin: auto; /* Center the card horizontally */
+            margin-top: 50px; /* Add some top margin for spacing */
         }
-        .container {
-            margin-top: 50px; /* Add some margin from the top */
+        .card-header-highlight {
+            background-color: #007bff; /* Blue background color */
+            color: white; /* White text color */
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+    <div class="container">
+        <div class="custom-card">
             <div class="card">
-                <div class="card-header">
-                    <h2 class="text-center">Update Config</h2>
+                <div class="card-header card-header-highlight">
+                    <h2 class="card-title text-center mb-0">Update Configuration</h2>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'authapp:view_config,html' %}" enctype="multipart/form-data">
+                    <form method="post" class="needs-validation" novalidate>
                         {% csrf_token %}
-                        {{ form.as_p }}
-                        <!-- Display other fields as needed -->
-                        <button type="submit" class="btn btn-primary">Update Configuration</button>
+                        <div class="form-group">
+                            <label for="latest_drone_version">Latest Drone Version</label>
+                            {{ form.latest_drone_version }}
+                        </div>
+                        <div class="form-group">
+                            <label for="latest_CC_version">Latest CC Version</label>
+                            {{ form.latest_CC_version }}
+                        </div>
+                        <div class="form-group">
+                            <label for="latest_FCS_version">Latest FCS Version</label>
+                            {{ form.latest_FCS_version }}
+                        </div>
+                        <div class="form-group">
+                            <label for="latest_BLL_version">Latest BLL Version</label>
+                            {{ form.latest_BLL_version }}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Update</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-<script>
-    $(document).ready( function () {
-        $('#warranties-table').DataTable();
-    } );
-</script>
-
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

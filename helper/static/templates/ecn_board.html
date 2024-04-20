@@ -1,89 +1,91 @@
 {% include 'nav.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drone Configuration</title>
+    <title>Drone Configurations</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
+        /* Custom Styles */
+        .table-header {
+            background-color: #87cefa; /* Light sky blue color for header background */
+            color: #fff; /* Text color for header */
         }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
+        .btn-update {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
         }
-        th {
-            background-color: #f2f2f2;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #e0e0e0; /* Light gray background color on hover */
-            cursor: pointer; /* Change cursor to pointer on hover */
-        }
-        .update-btn {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s ease; /* Smooth transition effect */
-        }
-        .update-btn:hover {
-            background-color: #45a049; /* Darker green color on button hover */
+        .btn-update:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h2>Drone Configurations</h2>
-    <table>
-        <tr>
-            <th>Drone ID</th>
-            <th>Drone Base Version</th>
-            <th>CC Base Version</th>
-            <th>FCS Base Version</th>
-            <th>BLL Base Version</th>
-            <th>Drone Current Version</th>
-            <th>CC Current Version</th>
-            <th>FCS Current Version</th>
-            <th>BLL Current Version</th>
-            <th>Latest Version Available</th>
-            <th>CC Latest Version Available</th>
-            <th>FCS Latest Version Available</th>
-            <th>BLL Latest Version Available</th>
-            <th>Actions</th>
-        </tr>
-        {% for config in configurations %}
-        <tr>
-            <td>{{ config.drone_id }}</td>
-            <td>{{ config.Drone_base_version }}</td>
-            <td>{{ config.CC_base_version }}</td>
-            <td>{{ config.FCS_base_version }}</td>
-            <td>{{ config.BLL_base_version }}</td>
-            <td>{{ config.drone_current_version }}</td>
-            <td>{{ config.CC_current_version }}</td>
-            <td>{{ config.FCS_current_version }}</td>
-            <td>{{ config.BLL_current_version }}</td>
-            <td>{{ config.Latest_version_available }}</td>
-            <td>{{ config.CC_Latest_version_available }}</td>
-            <td>{{ config.FCS_Latest_version_available }}</td>
-            <td>{{ config.BLL_Latest_version_available }}</td>
-            <td>
-                <form action="#" method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="update-btn">Update</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="container mt-4">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-header">
+                    <tr>
+                        <th rowspan="2">Drone ID</th>
+                        <th colspan="4">Base Version</th>
+                        <th colspan="4">Current Version</th>
+                        <th colspan="4">Available Version</th>
+                        <th rowspan="2">Action</th>
+                    </tr>
+                    <tr>
+                        <th>Drone</th>
+                        <th>CC</th>
+                        <th>FCS</th>
+                        <th>BLL</th>
+                        <th>Drone</th>
+                        <th>CC</th>
+                        <th>FCS</th>
+                        <th>BLL</th>
+                        <th>Drone</th>
+                        <th>CC</th>
+                        <th>FCS</th>
+                        <th>BLL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for config in drone_configurations %}
+                    <tr>
+                        <td>{{ config.drone_id }}</td>
+                        <td>{{ config.Drone_base_version }}</td>
+                        <td>{{ config.CC_base_version }}</td>
+                        <td>{{ config.FCS_base_version }}</td>
+                        <td>{{ config.BLL_base_version }}</td>
+                        <td>{{ config.drone_current_version }}</td>
+                        <td>{{ config.CC_current_version }}</td>
+                        <td>{{ config.FCS_current_version }}</td>
+                        <td>{{ config.BLL_current_version }}</td>
+                        <td>{{ config.Available_Drone_version }}</td>
+                        <td>{{ config.Available_CC_version }}</td>
+                        <td>{{ config.Available_FCS_version }}</td>
+                        <td>{{ config.Available_BLL_version }}</td>
+                        <!-- Conditional check to enable the button only for admin or staff -->
+                        <td>
+                            {% if user.is_authenticated and user.is_staff %}
+                            <button class="btn btn-update" onclick="updateConfig('{{ config.id }}')">Update</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JavaScript function to handle update button click -->
+    <script>
+        function updateConfig(id) {
+            window.location.href = '/update_config/' + id;
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,93 @@
+{% include 'nav.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Configuration</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <style>
+        /* Custom CSS to center the card and adjust its size */
+        .custom-card {
+            max-width: 400px; /* Set the maximum width of the card */
+            margin: auto; /* Center the card horizontally */
+            margin-top: 50px; /* Add some top margin for spacing */
+        }
+        .card-header-highlight {
+            background-color: #007bff; /* Blue background color */
+            color: white; /* White text color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="custom-card">
+            <div class="card">
+                <div class="card-header card-header-highlight">
+                    <h2 class="card-title text-center mb-0">Update Drone</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="Drone_id">Drone ID</label>
+                            <input type="text" class="form-control" id="Drone_id" name="Drone_id" placeholder="Enter Drone ID" required>
+                            <div class="invalid-feedback">Please enter the Drone ID.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="UIN">UIN</label>
+                            <input type="text" class="form-control" id="UIN" name="UIN" placeholder="Enter UIN" required>
+                            <div class="invalid-feedback">Please enter the UIN.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="drone_type">Drone Type</label>
+                            <input type="text" class="form-control" id="drone_type" name="drone_type" placeholder="Select Drone Type" required>
+                            <div class="invalid-feedback">Please select the Drone Type.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="AVB">AVB</label>
+                            <input type="text" class="form-control" id="AVB" name="AVB" placeholder="Enter AVB" required>
+                            <div class="invalid-feedback">Please enter the AVB.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Timble_module">Trimble Module</label>
+                            <input type="text" class="form-control" id="Timble_module" name="Timble_module" placeholder="Enter Trimble Module" required>
+                            <div class="invalid-feedback">Please enter the Trimble Module.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Subscription_date">Subscription Date</label>
+                            <input type="text" class="form-control datepicker" id="Subscription_date" name="Subscription_date" placeholder="Select Date" required>
+                            <div class="invalid-feedback">Please select the Subscription Date.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Subscription_end_date">Subscription End Date</label>
+                            <input type="text" class="form-control datepicker" id="Subscription_end_date" name="Subscription_end_date" placeholder="Select Date" required>
+                            <div class="invalid-feedback">Please select the Subscription End Date.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        // Initialize Bootstrap Datepicker for date fields
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd', // Date format
+            autoclose: true, // Close the datepicker when selecting a date
+            todayHighlight: true // Highlight today's date
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+{% include 'navdata.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Configuration Form</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Drone Configuration Form</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="id_drone_id">Drone ID</label>
+                        {{ form.drone_id }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_Drone_base_version">Drone Base Version</label>
+                        {{ form.Drone_base_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_CC_base_version">CC Base Version</label>
+                        {{ form.CC_base_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_FCS_base_version">FCS Base Version</label>
+                        {{ form.FCS_base_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_BLL_base_version">BLL Base Version</label>
+                        {{ form.BLL_base_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_drone_current_version">Drone Current Version</label>
+                        {{ form.drone_current_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_CC_current_version">CC Current Version</label>
+                        {{ form.CC_current_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_FCS_current_version">FCS Current Version</label>
+                        {{ form.FCS_current_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_BLL_current_version">BLL Current Version</label>
+                        {{ form.BLL_current_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_Available_Drone_version">Available Drone Version</label>
+                        {{ form.Available_Drone_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_Available_CC_version">Available CC Version</label>
+                        {{ form.Available_CC_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_Available_FCS_version">Available FCS Version</label>
+                        {{ form.Available_FCS_version }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_Available_BLL_version">Available BLL Version</label>
+                        {{ form.Available_BLL_version }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

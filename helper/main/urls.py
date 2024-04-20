@@ -6,7 +6,7 @@ from django.contrib.auth.views import (
     PasswordChangeView, PasswordChangeDoneView
 )
 from .views import dashboard, success_view, register, ECN, Subscription, create_warranty, create_allocated_customer, \
-    create_Drone, Warranty_data, product_model_spec, product_model_image, view_config, update_config, create_sop
+    create_Drone, Warranty_data, product_model_spec, product_model_image, create_sop, view_config, update_config, Add_data, create_drone_configuration, update_drone
 from . import views
 
 app_name = 'authapp'
@@ -15,13 +15,16 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('success/', views.success_view, name='success'),
     path('create_sop/', views.create_sop, name='create_sop'),
+    path('update_subs/<int:id>/', update_drone, name='update_drone'),
+    #path('update_subs/<int:id>/', views.update_drone, name='update_subs'),
     #path('edit/', edit, name='edit'),
     path('dashboard/', dashboard, name='dashboard'),
+    path('create_config/', views.create_drone_configuration, name='create_config'),
+    path('data/', views.Add_data, name='data'),
     path('warranty_data/', views.Warranty_data, name='warranty_data'),
     path('ecn_board/', views.view_config, name='ecn_board'),
-    path('update_config/', views.update_config, name='update_config'),
+    path('update_config/<int:config_id>/', update_config, name='update_config'),
     path('subscription/', views.Subscription, name='subscription'),
-    #path('update_config/<int:config_id>/', views.update_config, name='update-config'),
     path('drone_form/', views.create_Drone, name='drone_form'),
     path('customer_form/', views.create_allocated_customer, name='customer_form'),
     path('warranty/', views.create_warranty, name='warranty'),
