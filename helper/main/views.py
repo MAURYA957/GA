@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Category, Warranty, Product, Drone, AllocatedCustomer, DroneConfigration, ECN, User
 from django.http import FileResponse
 import os
-from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, ProductModel, DroneConfigrationForm, UserRegistrationForm
+from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, ProductModel, DroneConfigrationForm, UserRegistrationForm, SOPForm
 
 
 # Create your views here.
@@ -117,7 +117,8 @@ def create_Drone(request):
 
 
 def Warranty_data(request):
-    return render(request, 'warranty_data.html')
+    warranties = Warranty.objects.all()
+    return render(request, 'warranty_data.html', {'warranties': warranties})
 
 
 def product_model_image(request, model_id):
@@ -154,3 +155,17 @@ def update_config(request):
 
 def success_view(request):
     return render(request, 'success.html')  # Assuming you have a template named 'success.html'
+
+
+def create_sop(request):
+    if request.method == 'POST':
+        form = SOPForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            # Display success message
+            messages.success(request, 'SOP created successfully!')
+            # Redirect to a success page or do something else
+            return redirect('create_sop')  # Assuming you have a URL pattern named 'home' for the home page
+    else:
+        form = SOPForm()
+    return render(request, 'create_sop.html', {'form': form})

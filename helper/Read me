@@ -1,0 +1,28 @@
+
+Install using - pip install django-tinymce
+
+add following in installed app -
+'tinymce'
+Add this setting.py
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 400,
+    'width': 800,
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 20,
+    'selector': 'textarea',
+    'plugins': '''
+        textcolor save link image media preview codesample contextmenu
+        table code lists fullscreen  insertdatetime nonbreaking
+        contextmenu directionality searchreplace wordcount visualblocks
+        visualchars code fullscreen autolink lists  charmap print  hr
+        anchor pagebreak
+        ''',
+    'toolbar': '''
+        bold italic underline strikethrough | alignleft aligncenter alignright alignjustify |
+        formatselect fontselect fontsizeselect | cut copy paste | forecolor backcolor |
+        bullist numlist | outdent indent blockquote | undo redo | link unlink | image media |
+        preview fullscreen | codesample | table | charmap emoticons | hr removeformat |
+        insertdatetime | visualblocks visualchars | code
+        '''
+}

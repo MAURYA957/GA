@@ -13,14 +13,14 @@ body {
 }
 
 .header {
-  background-color: #EEF8FB;
+  background-color: #ADD8E6; /* Change to light sky blue */
   padding: 10px 0;
   text-align: center;
 }
 
 #navbar {
   overflow: hidden;
-  background-color: #333;
+  background-color: #007bff; /* Change to darker blue */
 }
 
 #greet {
@@ -44,8 +44,9 @@ body {
 }
 
 #navbar a:hover {
-  background-color: #ddd;
-  color: black;
+  background-color: #5f9ea1; /* Change hover color to turquoise */
+  color: white;
+  font-weight: bold; /* Make font bold on hover */
 }
 
 #navbar a.active {
@@ -144,9 +145,9 @@ body {
   {% if request.user.is_staff %}
   <a href="{% url 'authapp:warranty' %}">Add Warranty</a>
   <a href="{% url 'authapp:register' %}">Add User</a>
-  <a href="#">Add_ECN</a>
+  <a href="{% url 'authapp:customer_form' %}">Add_Owner</a>
   <a href="{% url 'authapp:drone_form' %}">Add_Drone</a>
-  <a href="#">Add_SOP</a>
+  <a href="{% url 'authapp:create_sop' %}">Add_SOP</a>
     {% endif %}
   </span>
 </div>

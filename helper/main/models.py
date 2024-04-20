@@ -306,7 +306,7 @@ class ECN(models.Model):
     department = models.CharField(max_length=50, choices=department_choice, default=1)
     release_by = models.CharField(max_length=100)
     release_date = models.DateField()
-    desc = models.CharField(max_length=2000)
+    desc = models.TextField(max_length=2000)
     sop = models.FileField(upload_to='documents/SOP/')
     created_on = models.DateField(auto_now_add=True)
 
@@ -327,16 +327,17 @@ class DroneConfigration(models.Model):
         return str(self.id)
 
 
-
 class SOP(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=200, unique=True)
     user_types = models.ManyToManyField(UserType)  # Changed field name to lowercase and removed on_delete attribute
     drone_model = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
-    sop_type = models.CharField(max_length=100)  # Added max_length parameter to SOP_Type field
-    document = models.ImageField(upload_to='Documents/KB/SOP', blank=True)
-    created_on = models.DateTimeField()
+    sop_type = models.CharField(max_length=20, choices=type_choice, default=1)  # Added max_length parameter to SOP_Type field
+    department = models.CharField(max_length=50, choices=department_choice, default=1)
+    desc = models.TextField(max_length=2000)
+    document = models.FileField(upload_to='Documents/KB/SOP', blank=True)
+    created_on = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name

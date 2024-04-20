@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'bootstrap4',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,26 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 400,
+    'width': 800,
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 20,
+    'selector': 'textarea',
+    'plugins': '''
+        textcolor save link image media preview codesample contextmenu
+        table code lists fullscreen  insertdatetime nonbreaking
+        contextmenu directionality searchreplace wordcount visualblocks
+        visualchars code fullscreen autolink lists  charmap print  hr
+        anchor pagebreak
+        ''',
+    'toolbar': '''
+        bold italic underline strikethrough | alignleft aligncenter alignright alignjustify |
+        formatselect fontselect fontsizeselect | cut copy paste | forecolor backcolor | 
+        bullist numlist | outdent indent blockquote | undo redo | link unlink | image media | 
+        preview fullscreen | codesample | table | charmap emoticons | hr removeformat | 
+        insertdatetime | visualblocks visualchars | code
+        '''
+}
+

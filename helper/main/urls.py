@@ -5,7 +5,8 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView, PasswordResetConfirmView,
     PasswordChangeView, PasswordChangeDoneView
 )
-from .views import dashboard, success_view, register, ECN, Subscription, create_warranty, create_allocated_customer, create_Drone, Warranty_data, product_model_spec, product_model_image, view_config, update_config
+from .views import dashboard, success_view, register, ECN, Subscription, create_warranty, create_allocated_customer, \
+    create_Drone, Warranty_data, product_model_spec, product_model_image, view_config, update_config, create_sop
 from . import views
 
 app_name = 'authapp'
@@ -13,6 +14,7 @@ app_name = 'authapp'
 urlpatterns = [
     path('register/', register, name='register'),
     path('success/', views.success_view, name='success'),
+    path('create_sop/', views.create_sop, name='create_sop'),
     #path('edit/', edit, name='edit'),
     path('dashboard/', dashboard, name='dashboard'),
     path('warranty_data/', views.Warranty_data, name='warranty_data'),
