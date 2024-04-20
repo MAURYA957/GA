@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Category, Warranty, Product, Drone, AllocatedCustomer, ECN, User, DroneConfiguration
 from django.http import FileResponse
 import os
-from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, ProductModel, UserRegistrationForm, SOPForm, updateConfigurationForm, DroneConfigurationForm
+from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, ProductModel, UserRegistrationForm, SOPForm, \
+    updateConfigurationForm, DroneConfigurationForm
 from .forms import DroneConfigurationForm, DroneUpdateForm
 
 
@@ -15,6 +16,7 @@ from .forms import DroneConfigurationForm, DroneUpdateForm
 def Subscription(request):
     drones = Drone.objects.all()
     return render(request, 'Subscription.html', {'drones': drones})
+
 
 def update_drone(request, id):  # Add the 'id' parameter
     drone = get_object_or_404(Drone, id=id)  # Retrieve the drone object based on the id
