@@ -26,3 +26,5 @@ TINYMCE_DEFAULT_CONFIG = {
         insertdatetime | visualblocks visualchars | code
         '''
 }
+
+pip install django celery

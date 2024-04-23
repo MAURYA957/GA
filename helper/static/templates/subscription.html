@@ -1,5 +1,4 @@
 {% include 'nav.html' %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,11 +50,11 @@
                 <thead>
                 <tr>
                     <th>Drone ID</th>
-                    <th>Drone Type</th>
                     <th>AVB ID</th>
                     <th>Trimble Module</th>
                     <th>Subscription Date</th>
                     <th>Subscription End Date</th>
+                    <th>Status</th> <!-- New column for subscription status -->
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -63,11 +62,11 @@
                 {% for drone in drones %}
                 <tr>
                     <td>{{ drone.Drone_id }}</td>
-                    <td>{{ drone.drone_type }}</td>
-                    <td>{{ drone.AVB_id }}</td>
-                    <td>{{ drone.Trimble_module }}</td>
+                    <td>{{ drone.AVB }}</td>
+                    <td>{{ drone.Timble_module }}</td>
                     <td>{{ drone.Subscription_date }}</td>
                     <td>{{ drone.Subscription_end_date }}</td>
+                    <td>{{ drone.subscription_status }}</td>
                     <td>
                         {% if user.is_authenticated and user.is_staff %}
                         <button class="btn btn-primary btn-update" onclick="updateConfig('{{ drone.id }}')">Update</button>

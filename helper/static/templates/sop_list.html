@@ -1,0 +1,69 @@
+{% include 'nav.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP List</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+    <style>
+        /* Custom Styles */
+        .view-btn, .download-btn {
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .view-btn:hover, .download-btn:hover {
+            color: #0056b3;
+        }
+        .thead-light {
+            background-color: #87CEEB; /* Light sky blue */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <table id="sops-table" class="table table-bordered table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Department</th>
+                    <th>SOP Type</th>
+                    <th>Drone Model</th>
+                    <th>View</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sop in sops %}
+                <tr>
+                    <td>{{ sop.name }}</td>
+                    <td>{{ sop.desc }}</td>
+                    <td>{{ sop.get_department_display }}</td>
+                    <td>{{ sop.get_sop_type_display }}</td>
+                    <td>{{ sop.drone_model }}</td>
+                    <td><a href="{% url 'authapp:view_sop_document' sop.id %}" target="_blank" class="view-btn">View</a></td>
+                    <td><a href="{% url 'authapp:download_sop_document' sop.id %}" download class="download-btn">Download</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- DataTables JavaScript -->
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        // Initialize DataTables
+        $(document).ready( function () {
+            $('#sops-table').DataTable();
+        });
+    </script>
+</body>
+</html>

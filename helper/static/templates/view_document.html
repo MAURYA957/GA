@@ -1,0 +1,17 @@
+{% include 'nav.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP Detail</title>
+</head>
+<body>
+    <h1>{{ sop.name }}</h1>
+    <p>Description: {{ sop.desc }}</p>
+    <p>Department: {{ sop.department }}</p>
+    <p>SOP Type: {{ sop.get_sop_type_display }}</p>
+    <p>Drone Model: {{ sop.drone_model }}</p>
+    <p>Document URL: <a href="{{ document_url }}" target="_blank">{{ document_url }}</a></p>
+</body>
+</html>

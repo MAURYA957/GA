@@ -5,55 +5,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Configuration</title>
+    <title>Drone Configuration Form</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        /* Custom CSS to center the card and adjust its size */
-        .custom-card {
-            max-width: 400px; /* Set the maximum width of the card */
-            margin: auto; /* Center the card horizontally */
-            margin-top: 50px; /* Add some top margin for spacing */
-        }
-        .card-header-highlight {
-            background-color: #007bff; /* Blue background color */
-            color: white; /* White text color */
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="custom-card">
-            <div class="card">
-                <div class="card-header card-header-highlight">
-                    <h2 class="card-title text-center mb-0">Update Configuration</h2>
-                </div>
-                <div class="card-body">
-                    <form method="post" class="needs-validation" novalidate>
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="latest_drone_version">Latest Drone Version</label>
-                            {{ form.latest_drone_version }}
-                        </div>
-                        <div class="form-group">
-                            <label for="latest_CC_version">Latest CC Version</label>
-                            {{ form.latest_CC_version }}
-                        </div>
-                        <div class="form-group">
-                            <label for="latest_FCS_version">Latest FCS Version</label>
-                            {{ form.latest_FCS_version }}
-                        </div>
-                        <div class="form-group">
-                            <label for="latest_BLL_version">Latest BLL Version</label>
-                            {{ form.latest_BLL_version }}
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Update</button>
-                    </form>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title text-center mb-0">Update Configuration Form</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="latest_drone_version">Latest Drone Version</label>
+                                <select name="latest_drone_version" id="latest_drone_version" class="form-control" required>
+                                    <option value="">Select Latest Drone Version</option>
+                                    <!-- Add options here -->
+                                    <!-- Example: <option value="1">Version 1</option> -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="latest_CC_version">Latest CC Version</label>
+                                <select name="latest_CC_version" id="latest_CC_version" class="form-control" required>
+                                    <option value="">Select Latest CC Version</option>
+                                    <!-- Add options here -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="latest_FCS_version">Latest FCS Version</label>
+                                <select name="latest_FCS_version" id="latest_FCS_version" class="form-control" required>
+                                    <option value="">Select Latest FCS Version</option>
+                                    <!-- Add options here -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="latest_BLL_version">Latest BLL Version</label>
+                                <select name="latest_BLL_version" id="latest_BLL_version" class="form-control" required>
+                                    <option value="">Select Latest BLL Version</option>
+                                    <!-- Add options here -->
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

@@ -110,6 +110,7 @@ html {
                 <th>Location</th>
                 <th>Warranty start_date</th>
                 <th>Warranty End date</th>
+                <th>Status</th>
                 <th>Handover Document</th>
                 <th>Dispatch list</th>
             </tr>
@@ -117,14 +118,15 @@ html {
             {% for warranty in warranties %}
             <tr>
              <td>{{ warranty.drone }}</td>
-             <td>{{ warranty.drone_uin }}</td>
+             <td>{{ warranty.uin }}</td>
              <td>{{ warranty.product_model }}</td>
              <td>{{ warranty.secondry_owner }}</td>
-             <td>{{ warranty.secondry_owner_city }}</td>
+             <td>{{ warranty.city }}</td>
              <td>{{ warranty.start_date }}</td>
              <td>{{ warranty.end_date }}</td>
-             <td><a href="#">Download</a></td>
-             <td><a href="#">Download</a></td>
+                <td>{{ warranty.status }}</td>
+             <td><a href="{% url 'authapp:download_handover_doc' warranty.id %}">Download</a></td>
+             <td><a href="{% url 'authapp:download_dispatch_list' warranty.id %}">Download</a></td>
             </tr>
             {% endfor %}
         </table>

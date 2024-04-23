@@ -108,12 +108,14 @@ class DroneForm(forms.ModelForm):
             'drone_type': forms.Select(attrs={'class': 'form-control'}),  # Use forms.Select for dropdown
             'AVB': forms.TextInput(attrs={'placeholder': 'Enter AVB', 'class': 'form-control'}),
             'Timble_module': forms.TextInput(attrs={'placeholder': 'Enter Trimble Module', 'class': 'form-control'}),
-            'Subscription_date': forms.DateInput(attrs={'placeholder': 'Enter Subscription Date', 'class': 'form-control'}),
-            'Subscription_end_date': forms.DateInput(attrs={'placeholder': 'Enter Subscription End Date', 'class': 'form-control'}),
+            'Subscription_date': forms.DateInput(
+                attrs={'placeholder': 'Enter Subscription Date', 'class': 'form-control'}),
+            'Subscription_end_date': forms.DateInput(
+                attrs={'placeholder': 'Enter Subscription End Date', 'class': 'form-control'}),
         }
 
 
-class DroneUpdateForm(forms.ModelForm):
+class update_Trimble_data_form(forms.ModelForm):
     class Meta:
         model = Drone
         fields = ['Drone_id', 'UIN', 'drone_type', 'AVB', 'Timble_module', 'Subscription_date', 'Subscription_end_date']
@@ -143,30 +145,20 @@ class DroneUpdateForm(forms.ModelForm):
         self.fields['Subscription_end_date'].widget.attrs.update(datepicker_attrs)
 
 
-class updateConfigurationForm(forms.ModelForm):
-    latest_drone_version = forms.ModelChoiceField(
-        queryset=ECN.objects.values_list('Drone_version', flat=True).distinct(), label='Latest Drone Version')
-    latest_CC_version = forms.ModelChoiceField(queryset=ECN.objects.values_list('CC_version', flat=True).distinct(),
-                                               label='Latest CC Version')
-    latest_FCS_version = forms.ModelChoiceField(queryset=ECN.objects.values_list('FCS_version', flat=True).distinct(),
-                                                label='Latest FCS Version')
-    latest_BLL_version = forms.ModelChoiceField(queryset=ECN.objects.values_list('BLL_version', flat=True).distinct(),
-                                                label='Latest BLL Version')
+class Update_Config_Form(forms.ModelForm):
+    drone_current_version = forms.CharField(max_length=20, label='Drone Current Version')
+    CC_current_version = forms.CharField(max_length=20, label='CC Current Version')
+    FCS_current_version = forms.CharField(max_length=20, label='FCS Current Version')
+    BLL_current_version = forms.CharField(max_length=20, label='BLL Current Version')
 
     class Meta:
         model = DroneConfiguration
-        fields = ['latest_drone_version', 'latest_CC_version', 'latest_FCS_version', 'latest_BLL_version']
+        fields = ['drone_current_version', 'CC_current_version', 'FCS_current_version', 'BLL_current_version']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['latest_drone_version'].widget.attrs['class'] = 'form-control'
-        self.fields['latest_drone_version'].widget.attrs['placeholder'] = 'Select Latest Drone Version'
-        self.fields['latest_CC_version'].widget.attrs['class'] = 'form-control'
-        self.fields['latest_CC_version'].widget.attrs['placeholder'] = 'Select Latest CC Version'
-        self.fields['latest_FCS_version'].widget.attrs['class'] = 'form-control'
-        self.fields['latest_FCS_version'].widget.attrs['placeholder'] = 'Select Latest FCS Version'
-        self.fields['latest_BLL_version'].widget.attrs['class'] = 'form-control'
-        self.fields['latest_BLL_version'].widget.attrs['placeholder'] = 'Select Latest BLL Version'
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})
 
 
 class SOPForm(forms.ModelForm):
