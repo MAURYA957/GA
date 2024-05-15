@@ -142,7 +142,9 @@ body {
   <a href="{% url 'authapp:warranty_data' %}">Warranty_Board</a>
   <a href="{% url 'authapp:ecn_board' %}">ECN_Board</a>
   <a href="{% url 'authapp:subscription' %}">Subscription_Board</a>
+  <a href="{% url 'authapp:drone' %}">Drones</a>
   {% if request.user.is_staff %}
+  <a href="{% url 'authapp:release' %}">ECN Release</a>
   <a href="{% url 'authapp:data' %}">Add data</a>
     {% endif %}
   </span>

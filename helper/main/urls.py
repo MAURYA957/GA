@@ -11,7 +11,7 @@ from .views import dashboard, success_view, register, ECN, Subscription, create_
     create_Drone, Warranty_data, create_sop, \
     view_config, update_config, Add_data, create_drone_configuration, \
     update_Trimble_data, download_handover_doc, download_dispatch_list, sop_list, productmodel_spec_view, \
-    view_sop_document, download_sop_document
+    view_sop_document, download_sop_document, create_ecn, release_veiw, Drones
 from . import views
 
 app_name = 'authapp'
@@ -40,10 +40,14 @@ urlpatterns = [
                   path('ecn_board/', views.view_config, name='ecn_board'),
                   path('update_config/<int:config_id>/', update_config, name='update_config'),
                   path('data/', views.Add_data, name='data'),
+                # create ecn and view pages link
+                path('ecn_form/', views.create_ecn, name='ecn_form'),
+                path('release/', views.release_veiw, name='release'),
                   # Subscription url
                   path('subscription/', views.Subscription, name='subscription'),
                   path('update_subs/<int:id>/', views.update_Trimble_data, name='update_Trimble_data'),
                   path('drone_form/', views.create_Drone, name='drone_form'),
+                path('drone/', views.Drones, name='drone'),
                   path('customer_form/', views.create_allocated_customer, name='customer_form'),
 
                   path('', LoginView.as_view(template_name='login.html'), name='login'),

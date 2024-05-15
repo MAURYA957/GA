@@ -1,46 +1,45 @@
 {% include 'navdata.html' %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Tiles</title>
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <style>
-        /* Add custom CSS styles here */
-        .card-img-top {
-            max-height: 200px; /* Adjust the max height of the image */
-            object-fit: cover; /* Ensure the image covers the entire container */
+        .product-tile {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Welcome to our website!</h1>
-    <h2>Categories</h2>
-    <div class="row">
-        {% for productModel in productModels %}
+<h1></h1>
+    <div class="container">
+        <div class="row">
+            {% for productmodel in productmodels %}
             <div class="col-md-4">
-                <div class="card mb-4">
-                    <img src="{{ product_model.get_image_url }}" class="card-img-top" alt="{{ productModel.model_name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ productModel.model_name }}</h5>
-                        <a href="{{ product_model.get_spec_url }}" class="btn btn-primary">View Details</a>
-                    </div>
+                <div class="product-tile">
+                    <img src="{{ productmodel.image.url }}" class="product-image" alt="Product Image">
+                    <h5>{{ productmodel.model_name }}</h5>
+                    <p>{{ productmodel.product }}</p>
+                    <p>{{ productmodel.description }}</p>
+                    <a href="{{ productmodel.spec.url }}" target="_blank" class="btn btn-primary">View Details</a>
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-<script>
-    $(document).ready(function () {
-        // Initialize DataTables if needed
-        // $('#warranties-table').DataTable();
-    });
-</script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+

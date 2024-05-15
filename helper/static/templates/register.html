@@ -1,11 +1,10 @@
 {% include 'navdata.html' %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update config</title>
+    <title>usercreate</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Custom CSS -->
@@ -28,10 +27,48 @@
                     <h2 class="text-center">Create User</h2>
                 </div>
                 <div class="card-body">
-                    <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ form.as_p }}
+                        <div class="form-group">
+                            <label for="id_name">Name</label>
+                            <input type="text" name="name" id="id_name" class="form-control" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_contact_no">Contact Number</label>
+                            <input type="text" name="contact_no" id="id_contact_no" class="form-control" placeholder="Contact Number">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_user_mail">Email</label>
+                            <input type="email" name="user_mail" id="id_user_mail" class="form-control" placeholder="Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_user_type">User Type</label>
+                            <input type="text" name="user_type" id="id_user_type" class="form-control" placeholder="User Type">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_country">Country</label>
+                            <input type="text" name="country" id="id_country" class="form-control" placeholder="Country">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_state_name">State</label>
+                            <input type="text" name="state_name" id="id_state_name" class="form-control" placeholder="State">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_district">District</label>
+                            <input type="text" name="district" id="id_district" class="form-control" placeholder="District">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_user_profile">Profile Picture</label>
+                            <input type="file" name="user_profile" id="id_user_profile" class="form-control" placeholder="Profile Picture">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_password">Password</label>
+                            <input type="password" name="password" id="id_password" class="form-control" placeholder="Password">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_confirm_password">Confirm Password</label>
+                            <input type="password" name="confirm_password" id="id_confirm_password" class="form-control" placeholder="Confirm Password">
+                        </div>
                         <button type="submit" class="btn btn-primary btn-block mt-4">Create User</button>
                     </form>
                 </div>

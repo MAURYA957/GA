@@ -13,12 +13,22 @@ from django import forms
 
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
 
     class Meta:
         model = User
         fields = ['name', 'contact_no', 'user_mail', 'user_type', 'country', 'state_name', 'district', 'user_profile',
                   'password']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Name'}),
+            'contact_no': forms.TextInput(attrs={'placeholder': 'Contact Number'}),
+            'user_mail': forms.EmailInput(attrs={'placeholder': 'Email'}),
+            'user_type': forms.Select(attrs={'placeholder': 'User Type'}),
+            'country': forms.TextInput(attrs={'placeholder': 'Country'}),
+            'state_name': forms.TextInput(attrs={'placeholder': 'State'}),
+            'district': forms.TextInput(attrs={'placeholder': 'District'}),
+            'user_profile': forms.FileInput(attrs={'placeholder': 'Profile Picture'}),
+        }
 
     def clean_contact_no(self):
         contact_no = self.cleaned_data['contact_no']
@@ -35,7 +45,7 @@ class UserRegistrationForm(forms.ModelForm):
 
 class WarrantyForm(forms.ModelForm):
     primary_owner = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Primary Owner'}))
-    secondry_owner = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Secondary Owner'}))
+    secondary_owner = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Secondary Owner'}))
     product = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Product'}))
     product_model = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Product Model'}))
     drone = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder': 'Drone'}))
@@ -47,7 +57,7 @@ class WarrantyForm(forms.ModelForm):
 
     class Meta:
         model = Warranty
-        fields = ['primary_owner', 'secondry_owner', 'product', 'product_model', 'drone',
+        fields = ['primary_owner', 'secondary_owner', 'product', 'product_model', 'drone',
                   'dispatch_date', 'delivery_date', 'start_date', 'end_date', 'dispatch_list', 'handover_doc']
 
     def __init__(self, *args, **kwargs):
@@ -118,22 +128,11 @@ class DroneForm(forms.ModelForm):
 class update_Trimble_data_form(forms.ModelForm):
     class Meta:
         model = Drone
-        fields = ['Drone_id', 'UIN', 'drone_type', 'AVB', 'Timble_module', 'Subscription_date', 'Subscription_end_date']
+        fields = ['Timble_module', 'Subscription_date', 'Subscription_end_date']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['Drone_id'].widget.attrs['placeholder'] = 'Enter Drone ID'
-        self.fields['UIN'].widget.attrs['placeholder'] = 'Enter UIN'
-
-        # Remove placeholder attribute for drone_type field if it exists
-        if 'placeholder' in self.fields['drone_type'].widget.attrs:
-            del self.fields['drone_type'].widget.attrs['placeholder']
-
-        self.fields['AVB'].widget.attrs['placeholder'] = 'Enter AVB'
         self.fields['Timble_module'].widget.attrs['placeholder'] = 'Enter Trimble Module'
-
-        # Add Bootstrap Select for drone_type field
-        self.fields['drone_type'].widget = forms.Select(attrs={'class': 'form-control'})
 
         # Add Bootstrap Datepicker for date fields
         datepicker_attrs = {
@@ -186,17 +185,37 @@ class DroneConfigurationForm(forms.ModelForm):
     class Meta:
         model = DroneConfiguration
         fields = '__all__'  # Use all fields from the model
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['Drone_base_version'].widget.attrs['placeholder'] = 'Drone Base Version'
+        self.fields['CC_base_version'].widget.attrs['placeholder'] = 'CC Base Version'
+        self.fields['FCS_base_version'].widget.attrs['placeholder'] = 'FCS Base Version'
+        self.fields['BLL_base_version'].widget.attrs['placeholder'] = 'BLL Base Version'
+        self.fields['drone_current_version'].widget.attrs['placeholder'] = 'Drone Current Version'
+        self.fields['CC_current_version'].widget.attrs['placeholder'] = 'CC Current Version'
+        self.fields['FCS_current_version'].widget.attrs['placeholder'] = 'FCS Current Version'
+        self.fields['BLL_current_version'].widget.attrs['placeholder'] = 'BLL Current Version'
+
+
+class ECNForm(forms.ModelForm):
+    class Meta:
+        model = ECN
+        fields = ['release', 'Drone_version', 'CC_version', 'FCS_version', 'BLL_version', 'expertise',
+                  'applicable_on', 'type', 'name', 'department', 'release_by', 'release_date', 'desc', 'sop']
         widgets = {
-            'Drone_base_version': forms.TextInput(attrs={'placeholder': 'Drone Base Version'}),
-            'CC_base_version': forms.TextInput(attrs={'placeholder': 'CC Base Version'}),
-            'FCS_base_version': forms.TextInput(attrs={'placeholder': 'FCS Base Version'}),
-            'BLL_base_version': forms.TextInput(attrs={'placeholder': 'BLL Base Version'}),
-            'drone_current_version': forms.TextInput(attrs={'placeholder': 'Drone Current Version'}),
-            'CC_current_version': forms.TextInput(attrs={'placeholder': 'CC Current Version'}),
-            'FCS_current_version': forms.TextInput(attrs={'placeholder': 'FCS Current Version'}),
-            'BLL_current_version': forms.TextInput(attrs={'placeholder': 'BLL Current Version'}),
-            'Available_Drone_version': forms.TextInput(attrs={'placeholder': 'Available Drone Version'}),
-            'Available_CC_version': forms.TextInput(attrs={'placeholder': 'Available CC Version'}),
-            'Available_FCS_version': forms.TextInput(attrs={'placeholder': 'Available FCS Version'}),
-            'Available_BLL_version': forms.TextInput(attrs={'placeholder': 'Available BLL Version'}),
+            'release': forms.TextInput(attrs={'placeholder': 'Release'}),
+            'Drone_version': forms.TextInput(attrs={'placeholder': 'Drone Version'}),
+            'CC_version': forms.TextInput(attrs={'placeholder': 'CC Version'}),
+            'FCS_version': forms.TextInput(attrs={'placeholder': 'FCS Version'}),
+            'BLL_version': forms.TextInput(attrs={'placeholder': 'BLL Version'}),
+            'expertise': forms.Select(attrs={'placeholder': 'Expertise'}),
+            'applicable_on': forms.Select(attrs={'placeholder': 'Applicable On'}),
+            'type': forms.Select(attrs={'placeholder': 'Type'}),
+            'name': forms.TextInput(attrs={'placeholder': 'Name'}),
+            'department': forms.Select(attrs={'placeholder': 'Department'}),
+            'release_by': forms.TextInput(attrs={'placeholder': 'Release By'}),
+            'release_date': forms.DateInput(attrs={'placeholder': 'Release Date'}),
+            'desc': forms.Textarea(attrs={'placeholder': 'Description'}),
+            'sop': forms.FileInput(attrs={'placeholder': 'SOP Document'}),
         }

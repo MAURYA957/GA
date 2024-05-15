@@ -10,7 +10,7 @@ from .models import Category, Warranty, Product, Drone, AllocatedCustomer, ECN, 
 import os
 from .forms import WarrantyForm, AllocatedCustomerForm, DroneForm, ProductModel, UserRegistrationForm, SOPForm, \
     Update_Config_Form, DroneConfigurationForm
-from .forms import DroneConfigurationForm, update_Trimble_data_form
+from .forms import DroneConfigurationForm, update_Trimble_data_form, ECNForm
 from datetime import datetime, timedelta
 from .tasks import send_warranty_expiry_reminder
 
@@ -18,6 +18,11 @@ from .tasks import send_warranty_expiry_reminder
 # Create your views here.
 
 # Subscription page veiw codes
+
+def Drones(request):
+    drones = Drone.objects.all()
+    return render(request, 'drone.html', {'drones': drones})
+
 
 def Subscription(request):
     drones = Drone.objects.all()
@@ -32,16 +37,18 @@ def Subscription(request):
     return render(request, 'Subscription.html', {'drones': drones, 'today': today})
 
 
-def update_Trimble_data(request, id):  # Add the 'id' parameter
-    drone = get_object_or_404(Drone, id=id)  # Retrieve the drone object based on the id
+def update_Trimble_data(request, id):
+    drone = get_object_or_404(Drone, id=id)
+
     if request.method == 'POST':
         form = update_Trimble_data_form(request.POST, instance=drone)
         if form.is_valid():
             form.save()
-            return render(request, 'Subscription.html.html')
-            # Redirect to a success page or render a template
+            # Redirect to a success page after successful update
+            return redirect('authapp:subscription')
     else:
         form = update_Trimble_data_form(instance=drone)
+
     return render(request, 'update_subs.html', {'form': form})
 
 
@@ -151,7 +158,8 @@ def create_Drone(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Drone created successfully! Add new Drone')
-            return render(request, 'drone_form.html')
+            # Redirect to a different page after successfully creating a new Drone
+            return redirect('authapp:drone')  # Replace 'drone_list' with the URL name of your drone list page
     else:
         form = DroneForm()
     return render(request, 'drone_form.html', {'form': form})
@@ -217,7 +225,8 @@ def update_config(request, config_id):
             print("Form is valid")
             form.save()
             messages.success(request, 'Configuration updated successfully.')
-            return render('ecn_board')  # Redirect to the ECN board page after successful update
+            # Redirect to the ECN board page after successful update
+            return redirect('authapp:ecn_board')
         else:
             print("Form has errors:", form.errors)
     else:
@@ -270,3 +279,19 @@ def download_sop_document(request, slug):
     response = HttpResponse(open(sop_file, 'rb'), content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{sop.name}.pdf"'
     return response
+
+
+def create_ecn(request):
+    if request.method == 'POST':
+        form = ECNForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('release.html')  # Redirect to a success page after form submission
+    else:
+        form = ECNForm()
+    return render(request, 'ecn_form.html', {'form': form})
+
+
+def release_veiw(request):
+    ecns = ECN.objects.all()
+    return render(request, 'release.html', {'ecns': ecns})
